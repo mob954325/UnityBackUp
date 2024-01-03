@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Sprint",
+                    "name": "Fire",
                     "type": "Button",
                     "id": "921f215d-5370-4bab-b6d8-5a9af027cb85",
                     "expectedControlType": "Button",
@@ -81,11 +81,11 @@
                 {
                     "name": "",
                     "id": "082397f8-1962-4cab-afea-5596dcf1673d",
-                    "path": "<Keyboard>/leftShift",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyBoard_Mouse",
-                    "action": "Sprint",
+                    "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

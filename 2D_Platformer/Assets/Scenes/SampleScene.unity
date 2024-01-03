@@ -440,10 +440,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1347007031}
   - component: {fileID: 1347007030}
-  - component: {fileID: 1347007029}
   - component: {fileID: 1347007032}
+  - component: {fileID: 1347007029}
   - component: {fileID: 1347007033}
   - component: {fileID: 1347007034}
+  - component: {fileID: 1347007035}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -533,7 +534,7 @@ Transform:
   m_GameObject: {fileID: 1347007028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.71, y: -1.8, z: 0}
+  m_LocalPosition: {x: 4.71, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -552,8 +553,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a5dae1dc3fd6d41b77a5e3de77bd11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 7
-  jumpPower: 5
+  _inputMove: {x: 0, y: 0}
+  _jumpPower: 7
+  _moveSpeed: 7
+  _moveX: 0
+  _isJump: 0
 --- !u!50 &1347007033
 Rigidbody2D:
   serializedVersion: 4
@@ -613,7 +617,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.08, y: -0.06}
+  m_Offset: {x: 0.08, y: -0.85}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -624,8 +628,50 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.59, y: 4.1875}
+  m_Size: {x: 0.99, y: 2.76}
   m_EdgeRadius: 0
+--- !u!114 &1347007035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347007028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 587fe05c03cf4ee4b9b2b155a509038e, type: 3}
+  m_NotificationBehavior: 3
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 85bce42a-da49-448c-9e5f-d24f6c7891b3
+    m_ActionName: Player/Move
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 80c25255-9a8a-4729-bbe6-59602be20fdc
+    m_ActionName: Player/Jump
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 921f215d-5370-4bab-b6d8-5a9af027cb85
+    m_ActionName: Player/Sprint
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: KeyBoard_Mouse
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1365739981
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,7 +720,7 @@ GameObject:
   - component: {fileID: 1918439838}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
