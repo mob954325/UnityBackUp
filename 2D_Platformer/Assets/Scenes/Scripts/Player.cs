@@ -13,8 +13,11 @@ public class Player : MonoBehaviour
     Animator _anim;
     SpriteRenderer _sprite;
 
-    // valueables
+    [Header("#Player Obj info")]
+    // valueable
     public Vector2 _inputMove = Vector2.zero;
+    public GameObject _bulletPos;
+    public GameObject _bullet;
     // Animator Parameter
     readonly int speed_String = Animator.StringToHash("speed");
     readonly int isJump_String = Animator.StringToHash("isJump");
@@ -22,11 +25,13 @@ public class Player : MonoBehaviour
     const string isRunningShot_string = "isRunningShot";
 
     [Header("#Player Stats")]
-    public float _jumpPower;
     public float _moveSpeed;
     public float _moveX;
+    public float _shotDelay = 0.2f;
+    public float _jumpPower;
+    public bool _isShot = false;
     public bool _isJump = false;
-    public bool _isShotting = false;
+    public bool _isShotting_Anim = false;
 
     void Awake()
     {
@@ -81,15 +86,13 @@ public class Player : MonoBehaviour
 
     private void OnJump(InputAction.CallbackContext context)
     {
-        if (_isShotting)
+        if (_isShotting_Anim)
             return;
 
         if(context.performed && !_isJump)
         {
             _rigid.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
             _isJump = true;
-
-
         }
     }
 
@@ -102,12 +105,14 @@ public class Player : MonoBehaviour
 
     private void OnFire(InputAction.CallbackContext context)
     {
-        if (_isJump)
+        if (_isJump || _isShot)
             return;
 
         if (context.performed)
         {
-            if(_inputMove.x != 0)
+            StartCoroutine(Shot_Corutine());
+
+            if (_inputMove.x != 0)
             {
                 _anim.SetTrigger(isRunningShot_string);
             }
@@ -115,7 +120,7 @@ public class Player : MonoBehaviour
             {
                 _anim.SetTrigger(isShot_string);
             }
-            _isShotting = true;
+            _isShotting_Anim = true;
         }
 
         if(context.canceled)
@@ -128,7 +133,15 @@ public class Player : MonoBehaviour
             {
                 _anim.SetTrigger(isShot_string);
             }
-            _isShotting = false;
+            _isShotting_Anim = false;
         }
+    }
+
+    IEnumerator Shot_Corutine()
+    {
+        Instantiate(_bullet, _bulletPos.transform.position, Quaternion.identity);
+        _isShot = true;
+        yield return new WaitForSeconds(_shotDelay);
+        _isShot = false;
     }
 }

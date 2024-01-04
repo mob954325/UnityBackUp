@@ -12,9 +12,13 @@ public class Player : MonoBehaviour
     //[Range(0.1f,1f)] : 스크롤 조절
     Player_InputAction action;
     Animator anim;
+    Rigidbody2D rigid;
+
     readonly int inputY_string = Animator.StringToHash("inputY");
 
-    public GameObject Bullet;
+    public GameObject bullet;
+    public GameObject flash;
+    public Transform fireTransform;
 
     private Vector2 inputDir = Vector2.zero;
     public float speed = 5f;
@@ -22,10 +26,22 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
+        flash.SetActive(false); // falsh disable
         action = new Player_InputAction(); // new inputAction
+
+        // 게임 오브젝트 찾는 방법
+        //GameObject.Find("FirePosition"); , //오브젝트 이름으로 찾기
+        //GameObject.FindAnyObjectByType<Transform>(); , //오브젝트 타입으로 찾기
+        //GameObject.FindFirstObjectByType<Transform>(); //특정 컴포넌트를 가지고 있는 첫번째 게임 오브젝트
+        //GameObject.FindGameObjectWithTag("player") //태그로 찾기
+        //GameObject.FindGameObjectsWithTag("Player"); //태그를 가진 모든 오브젝트를 가져오기
 
         // GetComponent 함수는 느리다 -> 한번만 실행되게 Awake에 실행
         anim = GetComponent<Animator>(); // 이 스크립트가 들어있는 게임 오브젝트에서 컴포넌트를 찾아서 저장
+        rigid = GetComponent<Rigidbody2D>();    
+
+        fireTransform = transform.GetChild(0);  // .GetChild(int n); : 현재 게임 오브젝트의 자식 찾기
+
     }
 
     void OnEnable()
@@ -80,19 +96,12 @@ public class Player : MonoBehaviour
             speed /= boostSpeed;
         }
     }
-
-
-    /// <summary>
-    /// Fire 액션이 발동했을때 실행시킬 함수
-    /// </summary>
-    /// <param name="입력관련 정보가 들어가있는 구조체 변수"></param>
-
     private void OnFire(InputAction.CallbackContext context)
     {
        if(context.performed)
         {
-            Debug.Log("OnFire : Key Down");
-            Instantiate(Bullet, transform.position, Quaternion.identity);
+            StartCoroutine(Co_flashEffect());
+            Instantiate(bullet, fireTransform.position, Quaternion.identity);
         }
 
         //if(context.canceled)
@@ -103,7 +112,32 @@ public class Player : MonoBehaviour
 /*        transform.position += new Vector3(inputDir.x * speed,
                                           inputDir.y * speed, 0);*/
 
-        transform.Translate(inputDir * speed * Time.deltaTime); // 1초당 speed만큼 inputDir방향으로 움직여라
+        // transform.Translate(inputDir * speed * Time.deltaTime); // 1초당 speed만큼 inputDir방향으로 움직여라
         // Time.deltaTime = 프레임간의 시간 간격(가변적)
+    }
+
+    void FixedUpdate()
+    {
+        rigid.MovePosition(rigid.position + Time.deltaTime * speed * inputDir);
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        // 충돌이 시작했을 때 실행
+        Debug.Log("OnCollisionEnter2D");
+
+        Debug.Log($"Collider2D : {collision.gameObject.name}");
+
+        if (collision.gameObject.CompareTag("Enemy")) // collision의 게임 오브젝트가 "Enemy"라는 태그를 가지는지 확인
+        {
+            Destroy(collision.gameObject); // 충돌한 대상을 제거
+        }
+    }
+
+    IEnumerator Co_flashEffect()
+    {
+        flash.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        flash.SetActive(false);
     }
 }
