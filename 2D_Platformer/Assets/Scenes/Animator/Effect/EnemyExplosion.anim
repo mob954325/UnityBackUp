@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BulletHit
+  m_Name: EnemyExplosion
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,11 +21,17 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 21300000, guid: 74b1f2f65f5d54fb79d714a16652e720, type: 3}
+      value: {fileID: 21300000, guid: 6f962f3b4e75746d496c3010cd39cea5, type: 3}
     - time: 0.083333336
-      value: {fileID: 21300000, guid: 75d0429ae97dd41bb9b262149a4687a4, type: 3}
+      value: {fileID: 21300000, guid: e4816b76c47974b188075a4a37fbe55a, type: 3}
     - time: 0.16666667
-      value: {fileID: 21300000, guid: 0c376fba3cf5246948d64bdaeca77f0e, type: 3}
+      value: {fileID: 21300000, guid: 7ef35a73885d14f1ab8f0925880a2af4, type: 3}
+    - time: 0.25
+      value: {fileID: 21300000, guid: b5fe33b9056c44d249e9b8fc43b6dd1e, type: 3}
+    - time: 0.33333334
+      value: {fileID: 21300000, guid: afb130b24c5274a6182bb53c0d12e23f, type: 3}
+    - time: 0.41666666
+      value: {fileID: 21300000, guid: f2918979de862409cbf2089f7fd99bc6, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -48,15 +54,18 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 74b1f2f65f5d54fb79d714a16652e720, type: 3}
-    - {fileID: 21300000, guid: 75d0429ae97dd41bb9b262149a4687a4, type: 3}
-    - {fileID: 21300000, guid: 0c376fba3cf5246948d64bdaeca77f0e, type: 3}
+    - {fileID: 21300000, guid: 6f962f3b4e75746d496c3010cd39cea5, type: 3}
+    - {fileID: 21300000, guid: e4816b76c47974b188075a4a37fbe55a, type: 3}
+    - {fileID: 21300000, guid: 7ef35a73885d14f1ab8f0925880a2af4, type: 3}
+    - {fileID: 21300000, guid: b5fe33b9056c44d249e9b8fc43b6dd1e, type: 3}
+    - {fileID: 21300000, guid: afb130b24c5274a6182bb53c0d12e23f, type: 3}
+    - {fileID: 21300000, guid: f2918979de862409cbf2089f7fd99bc6, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.25
+    m_StopTime: 0.5
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
