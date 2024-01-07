@@ -17,7 +17,6 @@ public class Player : MonoBehaviour
     // valueable
     public Vector2 _inputMove = Vector2.zero;
     public GameObject _bulletPos;
-    public float _bulletPosX;
     public GameObject _bullet;
     // Animator Parameter
     readonly int speed_String = Animator.StringToHash("speed");
@@ -31,7 +30,7 @@ public class Player : MonoBehaviour
     public float _moveX;
     public float _shotDelay = 0.2f;
     public float _jumpPower;
-    public bool _isFlipX = true;
+    public bool _isFlipX = false;
     public bool _isShot = false;
     public bool _isJump = false;
     public bool _isCrouch = false;
@@ -75,6 +74,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         transform.Translate(Time.deltaTime * _inputMove * _moveSpeed);
+
         _anim.SetBool(isJump_String, _isJump);
 
         if (_inputMove.x != 0)
@@ -83,23 +83,11 @@ public class Player : MonoBehaviour
             _sprite.flipX = _isFlipX;
         }
 
-        if (_inputMove.x < 0 && _isFlipX)
+        if(_isCrouch)
         {
-            if(_isCrouch)
-                _bulletPos.transform.localPosition = new Vector3(-1.9f, -0.7f, 0);
-            else
-                _bulletPos.transform.localPosition = new Vector3(-1.9f, 0.3f, 0);
-        }
-        else if (_inputMove.x > 0 && !_isFlipX)
-        {
-            if (_isCrouch)
-                _bulletPos.transform.localPosition = new Vector3(1.9f, -0.7f, 0);
-            else
-                _bulletPos.transform.localPosition = new Vector3(1.9f, 0.3f, 0);
+            _inputMove = Vector2.zero;
         }
     }
-
-
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -110,17 +98,36 @@ public class Player : MonoBehaviour
     }
     private void OnCrouch(InputAction.CallbackContext context)
     {
-        if (_inputMove.x != 0)
-            return;
-
         if (context.performed)
         {
             _isCrouch = true;
+
+            _inputMove.x = 0;
+
+            if (_isFlipX)
+            {
+                _bulletPos.transform.localPosition = new Vector3(-1.9f, -0.7f, 0);
+            }
+            else
+            {
+                _bulletPos.transform.localPosition = new Vector3(1.9f, -0.7f, 0);
+            }
         }
 
         if(context.canceled)
         {
             _isCrouch = false;
+
+            if (_isFlipX)
+            {
+                _bulletPos.transform.localPosition = new Vector3(-1.9f, 0.3f, 0);
+                _inputMove.x = (-1)*(float)_anim.GetFloat(speed_String);
+            }
+            else
+            {
+                _bulletPos.transform.localPosition = new Vector3(1.9f, 0.3f, 0);
+                _inputMove.x = (float)_anim.GetFloat(speed_String);
+            }
         }
 
         _anim.SetBool(isCrouch_String, _isCrouch);
@@ -140,12 +147,35 @@ public class Player : MonoBehaviour
 
     private void OnMove(InputAction.CallbackContext context)
     {
-        if (_isCrouch)
-            return;
-
         _inputMove = context.ReadValue<Vector2>();
 
         _anim.SetFloat(speed_String, Mathf.Abs(_inputMove.x));
+
+        if (context.performed)
+        {
+            if(_inputMove.x < 0)
+            {
+                if (_isCrouch)
+                {
+                    _bulletPos.transform.localPosition = new Vector3(-1.9f, -0.7f, 0);
+                }
+                else
+                {
+                    _bulletPos.transform.localPosition = new Vector3(-1.9f, 0.3f, 0);
+                }
+            }
+            else
+            {
+                if (_isCrouch)
+                {
+                    _bulletPos.transform.localPosition = new Vector3(1.9f, -0.7f, 0);
+                }
+                else
+                {
+                    _bulletPos.transform.localPosition = new Vector3(1.9f, 0.3f, 0);
+                }
+            }
+        }
     }
 
     private void OnFire(InputAction.CallbackContext context)

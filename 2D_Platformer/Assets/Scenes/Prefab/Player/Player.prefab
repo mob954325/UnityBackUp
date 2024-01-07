@@ -133,17 +133,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a5dae1dc3fd6d41b77a5e3de77bd11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shotPos: {x: 1.9, y: 0.3, z: 0}
-  _shotCrouchPos: {x: 1.9, y: -0.7, z: 0}
   _inputMove: {x: 0, y: 0}
   _bulletPos: {fileID: 1583586941767822500}
   _bulletPosX: 0
-  _bullet: {fileID: 5940195591255570811, guid: a0fe6625a8178434e80d2ba4f8e47b9f, type: 3}
+  _bullet: {fileID: 5940195591255570811, guid: dc67aa5263eee19408d03dab62da34fe, type: 3}
   _moveSpeed: 7
   _moveX: 0
-  _shotDelay: 0.22
-  _jumpPower: 7
-  _isFlipX: 0
+  _shotDelay: 0.2
+  _jumpPower: 5
+  _isFlipX: 1
   _isShot: 0
   _isJump: 0
   _isCrouch: 0
@@ -157,7 +155,7 @@ Animator:
   m_GameObject: {fileID: 5666925592558642681}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: cb85fc27b013fac428af7fde28610d77, type: 2}
+  m_Controller: {fileID: 9100000, guid: 03055b9be9f21f14da83558790058800, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

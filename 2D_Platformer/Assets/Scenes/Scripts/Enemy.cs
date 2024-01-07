@@ -3,26 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+public enum Type { Drone, Turret }
 public class Enemy : MonoBehaviour
 {
-    public enum Type { Drone, Turret }
+    public Type type;
 
     public GameObject _deadEffect;
+    public GameObject _bullet;
 
     [Header("#Enemy Stats")]
     public int hp = 1;
-    public float _distance; // CircleCast's distance
-    public float _size; // CircleCast's radius
+    public float _scanRange; // CircleCast's distance
+
+    protected RaycastHit2D _rayTarget;
+    public LayerMask _targetMast;
+    public Transform _target;
 
     void Update()
     {
-        RaycastHit2D hit = Physics2D.Linecast(transform.position, transform.position + Vector3.right * _distance);
+        // 원점, 지름, 방향, 길이, 감지할 Layer
+        _rayTarget = Physics2D.CircleCast(transform.position, _scanRange, Vector2.zero, 0, _targetMast);
 
-        Debug.DrawRay(transform.position, Vector2.right * _distance, Color.red);
+        Debug.DrawRay(transform.position, Vector2.right * _scanRange, Color.red);
 
-        if(hit.collider != null && hit.collider.gameObject.CompareTag("Player"))
+        if(_rayTarget.collider != null && _rayTarget.collider.gameObject.CompareTag("Player"))
         {
-            Debug.Log($"hit Raycast : {hit.collider.gameObject.name}");
+            _target = _rayTarget.collider.gameObject.transform;
+            // Debug.Log($"hit Raycast : {_rayTarget.collider.gameObject.name}");
+
+            // attack to player
+            //GameObject _bulletObj = Instantiate(_bullet, _bulletPos.transform.position, Quaternion.identity);
+
         }
     }
 
@@ -40,11 +51,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-/*    void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _distance);
+        Gizmos.DrawWireSphere(transform.position, _scanRange);
         //Gizmos.color = Color.blue;
         //Gizmos.DrawLine(shootVector, shootVector + (Vector3.right * transform.localScale.x * rangeAttack));
-    }*/
+    }
 }
