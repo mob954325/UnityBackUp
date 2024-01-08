@@ -24,11 +24,13 @@ public class Enemy : MonoBehaviour
     [Header("#Lay Target")]
     protected RaycastHit2D _rayTarget;
     public LayerMask _targetMast;
-    public Transform _target;
+    private Transform _target;
     [SerializeField]private Vector3 _bulletDirection;
+    [SerializeField]private GameObject _bulletPosition;
 
-    void Awake()
+    void Start()
     {
+        _bulletPosition = transform.GetChild(0).gameObject;
     }
 
     void Update()
@@ -82,7 +84,7 @@ public class Enemy : MonoBehaviour
     {
         _isShot = true;
 
-        GameObject _bulletObj = Instantiate(_bullet, transform.position, Quaternion.identity);
+        GameObject _bulletObj = Instantiate(_bullet, _bulletPosition.transform.position, Quaternion.identity);
         Bullet_Enemy _bulletEnemy = _bulletObj.AddComponent<Bullet_Enemy>();
         InitBullet(_bulletEnemy);
 
@@ -92,6 +94,7 @@ public class Enemy : MonoBehaviour
 
         Shot();
     }
+
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

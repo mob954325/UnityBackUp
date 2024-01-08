@@ -12,7 +12,7 @@ GameObject:
   m_Layer: 8
   m_Name: Shot Position
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -24,8 +24,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1583586941767822500}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.95, y: 0.3, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.8, y: 0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -135,16 +135,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputMove: {x: 0, y: 0}
   _bulletPos: {fileID: 1583586941767822500}
-  _bulletPosX: 0
   _bullet: {fileID: 5940195591255570811, guid: dc67aa5263eee19408d03dab62da34fe, type: 3}
-  _moveSpeed: 7
+  _bulletHitEffect: {fileID: 1507440922060346707, guid: 4224a886ce70bc042aae3d0fd73b3fcf, type: 3}
+  _bulletSpeed: 17
+  _moveSpeed: 7.08
   _moveX: 0
-  _shotDelay: 0.2
-  _jumpPower: 5
-  _isFlipX: 1
+  _shotDelay: 1
+  _jumpPower: 17
+  _hitPower: 1.2
+  _isFlipX: 0
   _isShot: 0
   _isJump: 0
   _isCrouch: 0
+  _isHit: 0
 --- !u!95 &9033798415362217487
 Animator:
   serializedVersion: 5
@@ -181,7 +184,7 @@ Rigidbody2D:
   m_Mass: 1.5
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1.2
+  m_GravityScale: 3.5
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2

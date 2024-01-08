@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bullet_Enemy : Bullet
 {
-    bool _isFlip = false;
+   // bool _isFlip = false;
     public Vector3 _direction;
     public Enemy _enemy;
     SpriteRenderer _sprite;
