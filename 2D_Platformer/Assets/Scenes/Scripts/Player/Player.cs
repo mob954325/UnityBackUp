@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     public Vector2 _inputMove = Vector2.zero;
     public GameObject _bulletPos;
     public GameObject _bullet;
+    public GameObject _bulletHitEffect;
     // Animator Parameter
     readonly int speed_String = Animator.StringToHash("speed");
     readonly int isJump_String = Animator.StringToHash("isJump");
@@ -26,14 +27,17 @@ public class Player : MonoBehaviour
     const string isRunningShot_string = "isRunningShot";
 
     [Header("#Player Stats")]
+    public float _bulletSpeed;
     public float _moveSpeed;
     public float _moveX;
     public float _shotDelay = 0.2f;
     public float _jumpPower;
-    public bool _isFlipX = false;
-    public bool _isShot = false;
-    public bool _isJump = false;
-    public bool _isCrouch = false;
+    public float _hitPower = 1.2f; // 피격 밀림 크기
+    public bool _isFlipX = false; // 스프라이트 뒤집혀짐 여부
+    public bool _isShot = false; // 사격 여부
+    public bool _isJump = false; // 점프 여부
+    public bool _isCrouch = false; // 앉기키 누름 여부
+    public bool _isHit = false; // 피격 여부
 
     //public bool _isShotting_Anim = false;
 
@@ -60,7 +64,7 @@ public class Player : MonoBehaviour
 
     void OnDisable()
     {
-        _inputActions.Player.Crouch.canceled -= OnCrouch;
+        _inputActions.Player.Crouch.canceled -= OnCrouch;  // null instant obj ?
         _inputActions.Player.Crouch.performed -= OnCrouch;
         _inputActions.Player.Fire.canceled -= OnFire;
         _inputActions.Player.Fire.performed -= OnFire;
@@ -91,9 +95,22 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        // check Player jump
         if(collision.gameObject.CompareTag("Ground"))
         {
             _isJump = false;
+        }
+
+        // check enemy attack
+        if(collision.gameObject.CompareTag("EnemyBullet") && !_isHit)
+        {
+            Debug.Log($"ATTACKED BY {collision.gameObject.name}");
+
+            Vector3 _hitDir = collision.transform.position;
+            _rigid.AddForce(_hitDir * _hitPower, ForceMode2D.Impulse);
+            _rigid.velocity = Vector3.zero;
+
+            StartCoroutine(Hit_Corutine());
         }
     }
     private void OnCrouch(InputAction.CallbackContext context)
@@ -214,10 +231,27 @@ public class Player : MonoBehaviour
     IEnumerator Shot_Corutine()
     {
         GameObject _bulletObj = Instantiate(_bullet, _bulletPos.transform.position, Quaternion.identity);
-        _bulletObj.GetComponent<Bullet>()._player = this;
+        Bullet_Player _bulletPlayer = _bulletObj.AddComponent<Bullet_Player>();
+        _bulletPlayer._speed = _bulletSpeed;
+        _bulletPlayer._hitEffect = _bulletHitEffect;
+        _bulletPlayer._player = this;
+        _bulletPlayer.tag = "PlayerBullet";
 
         _isShot = true;
         yield return new WaitForSeconds(_shotDelay);
         _isShot = false;
+    }
+
+    /// <summary>
+    /// 피격 코루틴 함수
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator Hit_Corutine()
+    {
+        _sprite.color = new Color(0.5f, 0.5f, 0.5f, 1);
+        _isHit = true;
+        yield return new WaitForSeconds(1f);
+        _sprite.color = Color.white;
+        _isHit = false;
     }
 }

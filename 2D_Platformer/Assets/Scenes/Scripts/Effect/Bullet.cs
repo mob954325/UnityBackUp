@@ -5,41 +5,27 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float _speed = 1.2f;
-    bool _isFlip = false;
-
+    // must add effect list to override bullets
+    public float _speed = 20f;
     public GameObject _hitEffect;
-    public Player _player;
-    SpriteRenderer _sprite;
+    public virtual void CompareCollider(Collision2D collision) // enter colliderEnter2D script
+    {
 
-    void Awake()
-    {
-        _sprite = GetComponent<SpriteRenderer>();    
     }
-    void Start()
+
+    public virtual void Active() // enter Flip Sprite script , It'll start at Update
     {
-        _isFlip = _player._isFlipX;
+
     }
 
     void Update()
     {
-        if(_isFlip)
-        {
-            transform.position += Vector3.left * _speed * Time.deltaTime;
-            _sprite.flipX = true;
-        }
-        else if(!_isFlip)
-        {
-            transform.position += Vector3.right * _speed * Time.deltaTime;
-        }
+        Active();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("Enemy"))
-        {
-            Instantiate(_hitEffect, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-        }
+        CompareCollider(collision);
     }
+
 }
