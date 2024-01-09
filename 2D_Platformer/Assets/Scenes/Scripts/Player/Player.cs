@@ -7,10 +7,12 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    float _gravityScale = 3.5f;
     // Component
     PlayerInput _inputActions;
     Rigidbody2D _rigid;
-    Animator _anim;
+    Animator _animator;
+    Animation _animation;
     SpriteRenderer _sprite;
 
     [Header("#Player Obj info")]
@@ -23,6 +25,8 @@ public class Player : MonoBehaviour
     readonly int speed_String = Animator.StringToHash("speed");
     readonly int isJump_String = Animator.StringToHash("isJump");
     readonly int isCrouch_String = Animator.StringToHash("isCrouch");
+    readonly int isClimb_String = Animator.StringToHash("isClimb");
+    readonly int doneClimb_String = Animator.StringToHash("doneClimb");
     const string isShot_string = "isShot";
     const string isRunningShot_string = "isRunningShot";
 
@@ -38,14 +42,18 @@ public class Player : MonoBehaviour
     public bool _isJump = false; // 점프 여부
     public bool _isCrouch = false; // 앉기키 누름 여부
     public bool _isHit = false; // 피격 여부
+    public bool _canClimb = false;
 
     //public bool _isShotting_Anim = false;
 
     void Awake()
     {
+        _gravityScale = 3.5f;
+
         _inputActions = new PlayerInput();
         _rigid = GetComponent<Rigidbody2D>();
-        _anim = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
+        _animation = GetComponent<Animation>();
         _sprite = GetComponent<SpriteRenderer>();
     }
 
@@ -64,7 +72,7 @@ public class Player : MonoBehaviour
 
     void OnDisable()
     {
-        _inputActions.Player.Crouch.canceled -= OnCrouch;  // null instant obj ?
+        _inputActions.Player.Crouch.canceled -= OnCrouch;
         _inputActions.Player.Crouch.performed -= OnCrouch;
         _inputActions.Player.Fire.canceled -= OnFire;
         _inputActions.Player.Fire.performed -= OnFire;
@@ -79,7 +87,7 @@ public class Player : MonoBehaviour
     {
         transform.Translate(Time.deltaTime * _inputMove * _moveSpeed);
 
-        _anim.SetBool(isJump_String, _isJump);
+        _animator.SetBool(isJump_String, _isJump);
 
         if (_inputMove.x != 0)
         {
@@ -91,10 +99,16 @@ public class Player : MonoBehaviour
         {
             _inputMove = Vector2.zero;
         }
+
+        if(!_canClimb)
+        {
+            _inputMove.y = 0f;
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+
         // check Player jump
         if(collision.gameObject.CompareTag("Ground"))
         {
@@ -113,6 +127,25 @@ public class Player : MonoBehaviour
             StartCoroutine(Hit_Corutine());
         }
     }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ladder"))
+        {
+            _canClimb = true;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ladder"))
+        {
+            _canClimb = false;
+            _animator.SetTrigger(doneClimb_String);
+            _rigid.gravityScale = _gravityScale;
+        }
+    }
+
     private void OnCrouch(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -138,21 +171,21 @@ public class Player : MonoBehaviour
             if (_isFlipX)
             {
                 _bulletPos.transform.localPosition = new Vector3(-1.9f, 0.3f, 0);
-                _inputMove.x = (-1)*(float)_anim.GetFloat(speed_String);
+                _inputMove.x = (-1)*(float)_animator.GetFloat(speed_String);
             }
             else
             {
                 _bulletPos.transform.localPosition = new Vector3(1.9f, 0.3f, 0);
-                _inputMove.x = (float)_anim.GetFloat(speed_String);
+                _inputMove.x = (float)_animator.GetFloat(speed_String);
             }
         }
 
-        _anim.SetBool(isCrouch_String, _isCrouch);
+        _animator.SetBool(isCrouch_String, _isCrouch);
     }
 
     private void OnJump(InputAction.CallbackContext context)
     {
-        if (_isShot || _isCrouch)
+        if (_isShot || _isCrouch || _canClimb)
             return;
 
         if(context.performed && !_isJump)
@@ -166,10 +199,11 @@ public class Player : MonoBehaviour
     {
         _inputMove = context.ReadValue<Vector2>();
 
-        _anim.SetFloat(speed_String, Mathf.Abs(_inputMove.x));
+        _animator.SetFloat(speed_String, Mathf.Abs(_inputMove.x));
 
         if (context.performed)
         {
+            /// flip Sprite
             if(_inputMove.x < 0)
             {
                 if (_isCrouch)
@@ -192,7 +226,14 @@ public class Player : MonoBehaviour
                     _bulletPos.transform.localPosition = new Vector3(1.9f, 0.3f, 0);
                 }
             }
-        }
+
+            if(_canClimb)
+            {
+                _isJump = false;
+                _animator.SetTrigger(isClimb_String);
+                _rigid.gravityScale = 0f;
+            }
+        } // performed
     }
 
     private void OnFire(InputAction.CallbackContext context)
@@ -206,11 +247,11 @@ public class Player : MonoBehaviour
 
             if (_inputMove.x != 0 || _isCrouch)
             {
-                _anim.SetTrigger(isRunningShot_string);
+                _animator.SetTrigger(isRunningShot_string);
             }
             else
             {
-                _anim.SetTrigger(isShot_string);
+                _animator.SetTrigger(isShot_string);
             }
         }
 
@@ -218,11 +259,11 @@ public class Player : MonoBehaviour
         {
             if (_inputMove.x != 0 || _isCrouch)
             {
-                _anim.SetTrigger(isRunningShot_string);
+                _animator.SetTrigger(isRunningShot_string);
             }
             else
             {
-                _anim.SetTrigger(isShot_string);
+                _animator.SetTrigger(isShot_string);
             }
             
         }
@@ -246,7 +287,7 @@ public class Player : MonoBehaviour
     /// 피격 코루틴 함수
     /// </summary>
     /// <returns></returns>
-    IEnumerator Hit_Corutine()
+    IEnumerator Hit_Corutine()//
     {
         _sprite.color = new Color(0.5f, 0.5f, 0.5f, 1);
         _isHit = true;
