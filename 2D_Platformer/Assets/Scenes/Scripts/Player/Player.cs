@@ -110,7 +110,7 @@ public class Player : MonoBehaviour
     {
 
         // check Player jump
-        if(collision.gameObject.CompareTag("Ground"))
+        if(collision.gameObject.CompareTag("Block"))
         {
             _isJump = false;
         }
@@ -198,6 +198,7 @@ public class Player : MonoBehaviour
     private void OnMove(InputAction.CallbackContext context)
     {
         _inputMove = context.ReadValue<Vector2>();
+        _inputMove.y = 0f;
 
         _animator.SetFloat(speed_String, Mathf.Abs(_inputMove.x));
 
@@ -231,6 +232,7 @@ public class Player : MonoBehaviour
             {
                 _isJump = false;
                 _animator.SetTrigger(isClimb_String);
+                _inputMove.y = context.ReadValue<Vector2>().y;
                 _rigid.gravityScale = 0f;
             }
         } // performed

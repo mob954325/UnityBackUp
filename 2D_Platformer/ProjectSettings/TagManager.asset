@@ -4,11 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Ground
   - Enemy
   - PlayerBullet
   - EnemyBullet
   - Ladder
+  - Block
   layers:
   - Default
   - TransparentFX
