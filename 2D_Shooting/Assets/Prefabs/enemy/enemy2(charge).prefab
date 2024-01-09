@@ -183,8 +183,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a17861e0ed6763246bdeabed4854e775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 3
+  score: 10
   speed: 1.8
+  amplitude: 3
+  frequency: 2
+  explosionEffect: {fileID: 3384605200368355312, guid: d03c925077fc7854dbfd23edebe09154, type: 3}
   rotSpeed: 2.5
   chargeTime: 2.5
-  target: {fileID: 0}
+  target: {fileID: 105814048334587132, guid: dc7d6b2275ebd284fa7db50d47dc16ff, type: 3}
   isCharged: 0

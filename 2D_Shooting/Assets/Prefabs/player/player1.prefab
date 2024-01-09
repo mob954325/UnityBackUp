@@ -103,10 +103,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 6464655381913463548, guid: 509062ff5763ac24a954816b6eb2c358, type: 3}
-  flash: {fileID: 2505537480308677849}
+  fireFlash: {fileID: 2505537480308677849}
   fireTransform: {fileID: 7224551579550305723}
   speed: 5
   boostSpeed: 1.5
+  fireInterval: 0.5
 --- !u!70 &2051111170037822581
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
