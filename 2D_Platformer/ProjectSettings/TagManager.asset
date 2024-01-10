@@ -9,6 +9,7 @@ TagManager:
   - EnemyBullet
   - Ladder
   - Block
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Enemy
   - Bullet
   - Player
-  - 
+  - Ground
   - 
   - 
   - 

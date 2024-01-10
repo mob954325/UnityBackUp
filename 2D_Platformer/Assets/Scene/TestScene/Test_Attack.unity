@@ -167,25 +167,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -5623379071427961360, guid: a4a050bf41a005448b936f6c5dac83fd, type: 3}
-      propertyPath: _rayOffsetX
-      value: -1.83
-      objectReference: {fileID: 0}
     - target: {fileID: 5273539279583920281, guid: a4a050bf41a005448b936f6c5dac83fd, type: 3}
       propertyPath: m_Name
       value: Drone
       objectReference: {fileID: 0}
     - target: {fileID: 8798902978370991397, guid: a4a050bf41a005448b936f6c5dac83fd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.68
+      value: 5.7
       objectReference: {fileID: 0}
     - target: {fileID: 8798902978370991397, guid: a4a050bf41a005448b936f6c5dac83fd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.64
+      value: -1.45
       objectReference: {fileID: 0}
     - target: {fileID: 8798902978370991397, guid: a4a050bf41a005448b936f6c5dac83fd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.24
       objectReference: {fileID: 0}
     - target: {fileID: 8798902978370991397, guid: a4a050bf41a005448b936f6c5dac83fd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -271,6 +267,10 @@ PrefabInstance:
     - target: {fileID: 5686202816242628999, guid: bbe3665d69f1dc547a0ebc6bbe0aa94c, type: 3}
       propertyPath: m_Name
       value: Enemy_Turret
+      objectReference: {fileID: 0}
+    - target: {fileID: 5686202816242628999, guid: bbe3665d69f1dc547a0ebc6bbe0aa94c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -643,7 +643,7 @@ GameObject:
   - component: {fileID: 1294628491}
   - component: {fileID: 1294628490}
   - component: {fileID: 1294628489}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ground
   m_TagString: Ground
   m_Icon: {fileID: 0}

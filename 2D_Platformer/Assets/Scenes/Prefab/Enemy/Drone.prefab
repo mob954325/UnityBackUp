@@ -122,3 +122,10 @@ MonoBehaviour:
   type: 0
   _hp: 1
   _deadEffect: {fileID: 3885288369525962863, guid: ed19785e00955664eb316e621551dbac, type: 3}
+  _rayOffsetX: 3
+  _rayOffsetY: -3
+  _targetMast:
+    serializedVersion: 2
+    m_Bits: 512
+  _moveDir: {x: 0, y: 0, z: 0}
+  _speed: 3
