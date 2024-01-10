@@ -41,8 +41,8 @@ GameObject:
   m_Component:
   - component: {fileID: 883596517976337306}
   - component: {fileID: 555846335691389372}
+  - component: {fileID: 3789080709918406818}
   - component: {fileID: 653744937284642701}
-  - component: {fileID: 4148582112857324644}
   - component: {fileID: 857110852604755193}
   m_Layer: 6
   m_Name: Enemy_Turret
@@ -119,6 +119,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3789080709918406818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5686202816242628999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e770f54b93e3238499a3760d34de759c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  _hp: 1
+  _deadEffect: {fileID: 3885288369525962863, guid: ed19785e00955664eb316e621551dbac, type: 3}
+  _bullet: {fileID: 5940195591255570811, guid: dc67aa5263eee19408d03dab62da34fe, type: 3}
+  _bulletHitEffect: {fileID: 1507440922060346707, guid: 4224a886ce70bc042aae3d0fd73b3fcf, type: 3}
+  _bulletSpeed: 7
+  _scanRange: 3
+  _shotIntervalTime: 1.2
+  _isShot: 0
+  _targetMast:
+    serializedVersion: 2
+    m_Bits: 256
+  _bulletDirection: {x: 0, y: 0, z: 0}
+  _bulletPosition: {fileID: 0}
 --- !u!95 &653744937284642701
 Animator:
   serializedVersion: 5
@@ -140,32 +166,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4148582112857324644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5686202816242628999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 310dbf1960d53c94aac0e7ad2428cd18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 1
-  _deadEffect: {fileID: 3885288369525962863, guid: ed19785e00955664eb316e621551dbac, type: 3}
-  _bullet: {fileID: 5940195591255570811, guid: dc67aa5263eee19408d03dab62da34fe, type: 3}
-  _bulletHitEffect: {fileID: 1507440922060346707, guid: 4224a886ce70bc042aae3d0fd73b3fcf, type: 3}
-  _hp: 1
-  _bulletSpeed: 5
-  _scanRange: 2
-  _shotIntervalTime: 1.76
-  _isShot: 0
-  _targetMast:
-    serializedVersion: 2
-    m_Bits: 256
-  _bulletDirection: {x: 0, y: 0, z: 0}
-  _bulletPosition: {fileID: 0}
 --- !u!61 &857110852604755193
 BoxCollider2D:
   m_ObjectHideFlags: 0
