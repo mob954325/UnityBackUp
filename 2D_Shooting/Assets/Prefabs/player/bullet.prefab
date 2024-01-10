@@ -102,7 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 20
   waveStength: 0
-  lifeTime: 10
+  lifeTime: 3
   effectPrefab: {fileID: 6694965088242985081, guid: 8ec73b464c585874aac1706f102d698c, type: 3}
 --- !u!70 &6853283946070011376
 CapsuleCollider2D:

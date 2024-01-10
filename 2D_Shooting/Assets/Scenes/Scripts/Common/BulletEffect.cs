@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletEffect : MonoBehaviour
+public class BulletEffect : RecycleObject
 {
     Animator anim;
     float animLength = 0.0f;
@@ -19,12 +19,18 @@ public class BulletEffect : MonoBehaviour
     {
         //StartCoroutine(Co_DestoryObj());
 
-        Destroy(this.gameObject, animLength);
+        //Destroy(this.gameObject, animLength);
     }
 
-    IEnumerator Co_DestoryObj()
+    //IEnumerator Co_DestoryObj()
+    //{
+    //    yield return new WaitForSeconds(0.2f);
+    //    Destroy(gameObject);
+    //}
+
+    protected override void OnEnable()
     {
-        yield return new WaitForSeconds(0.2f);
-        Destroy(gameObject);
+        base.OnEnable();
+        StartCoroutine(LifeOver(animLength));
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : RecycleObject
 {
     /// <summary>
     /// 적이 죽을 때 실행될 델리게이트
@@ -53,23 +53,43 @@ public class Enemy : MonoBehaviour
     [Header("# obj")]
     public GameObject explosionEffect; // explosionEffect
 
+    Player player;
 
     void Awake()
     {
         coll = GetComponent<Collider2D>();
     }
 
-    void Start()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+        onInitialze();
+
+
         spawnY = transform.position.y;
         elapsedTime = 0.0f;
 
         //Action aa = () => Debug.Log("람다함수");
         //Action<int> bb = (x) => Debug.Log($"람다함수 {x}"); // 파라미터 받기
-        //Func<int> cc = () => 10; // 파라미터 x, 항상 10 리턴
+        //Func<int> cc = () => 10; // 파라미터 x, 항상 10 리턴 
 
-        Player player = FindAnyObjectByType<Player>();
-        onDie += () => player.AddScore(score); // 죽을때 addScore 함수 실행 등록 
+    }
+
+    protected override void OnDisable()
+    {
+        if(player != null)
+        {
+            onDie -= PlayerAddScore;
+            onDie = null;
+            player = null;
+        }
+
+        base.OnDisable();
+    }
+
+    void PlayerAddScore()
+    {
+        player.AddScore(score);
     }
 
     void Update()
@@ -92,6 +112,19 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.CompareTag("Bullet"))
         {
             Hp--;
+        }
+    }
+
+    private void onInitialze()
+    {
+        if(player = null)
+        {
+            player = GameManager.Instance.Player;
+        }
+        if (player != null)
+        {
+            //onDie += () => player.AddScore(score); // 죽을때 addScore 함수 실행 등록 
+            onDie += PlayerAddScore;
         }
     }
 
@@ -119,7 +152,7 @@ public class Enemy : MonoBehaviour
 
         onDie?.Invoke();
 
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
    
 

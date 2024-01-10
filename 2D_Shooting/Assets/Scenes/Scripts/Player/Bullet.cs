@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet : RecycleObject
 {
     // 시작하자마자 계속 오른쪽으로 초속 7로 움직이게 만들기
 
@@ -21,9 +21,15 @@ public class Bullet : MonoBehaviour
     /// </summary>
     public GameObject effectPrefab;
 
-    void Start()
+    //void Start()
+    //{
+    //    // Destroy(gameObject, lifeTime); // lifeTime이후 스스로 삭제
+    //}
+
+    protected override void OnEnable()
     {
-        Destroy(gameObject, lifeTime); // lifeTime이후 스스로 삭제
+        base.OnEnable();
+        StartCoroutine(LifeOver(lifeTime));
     }
 
     void Update()
@@ -54,7 +60,8 @@ public class Bullet : MonoBehaviour
 
         Instantiate(effectPrefab, transform.position, Quaternion.identity); // hit 이펙트 생성
 
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
 
