@@ -23,8 +23,10 @@ public class Enemy_Turret : Enemy
     [SerializeField] private Vector3 _bulletDirection;
     [SerializeField] private GameObject _bulletPosition;
 
-    void Start()
+
+    protected override void Start()
     {
+        base.Start();
         _bulletPosition = transform.GetChild(0).gameObject;
     }
 

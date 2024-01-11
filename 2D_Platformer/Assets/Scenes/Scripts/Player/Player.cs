@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using Unity.Mathematics;
 [RequireComponent(typeof(Animator))]
 
 public class Player : MonoBehaviour
@@ -14,6 +15,25 @@ public class Player : MonoBehaviour
     Animator _animator;
     Animation _animation;
     SpriteRenderer _sprite;
+
+    Action<int> _changeScore;
+
+    [Header("Score")]
+    [SerializeField]private int _maxScore = 9999;
+    [SerializeField]private int _score;
+    public int _Score
+    {
+        get => _score;
+        set
+        {
+            if (_score != value)
+            {
+                _score = Math.Max(value, _maxScore);
+                //_changeScore?.Invoke(_score); delegate to score UI
+            }
+        }
+
+    }
 
     [Header("#Player Obj info")]
     // valueable
@@ -45,6 +65,11 @@ public class Player : MonoBehaviour
     public bool _canClimb = false;
 
     //public bool _isShotting_Anim = false;
+
+    public void AddScore(int getScore)
+    {
+        _score += getScore;
+    }
 
     void Awake()
     {
