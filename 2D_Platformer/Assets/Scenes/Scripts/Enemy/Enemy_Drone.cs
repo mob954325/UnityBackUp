@@ -41,7 +41,7 @@ public class Enemy_Drone : Enemy
         _rayTarget = Physics2D.Linecast(_startRay, _endRay, _targetMast);
         Debug.DrawRay(_startRay, (_endRay - _startRay));
 
-        if (_rayTarget.collider != null && _rayTarget.collider.gameObject.CompareTag("Block"))
+        if (_rayTarget.collider != null && _rayTarget.collider.gameObject.CompareTag("Platform"))
         {
             //Debug.Log($"tag : {_rayTarget.collider.gameObject.tag}");
         }

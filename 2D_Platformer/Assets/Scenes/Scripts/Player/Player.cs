@@ -14,6 +14,11 @@ public class Player : MonoBehaviour
     Animator _animator;
     SpriteRenderer _sprite;
 
+    // _ray
+    RaycastHit2D _ray;
+    [SerializeField] float _distance = 0f;
+    [SerializeField] float _distanceray = 0f;
+    
     // delegate
     Action<int> _changeScore;
 
@@ -118,6 +123,8 @@ public class Player : MonoBehaviour
 
         _animator.SetBool(isJump_String, _isJump);
 
+        CheckJump();
+
         if (_inputMove.x != 0)
         {
             _isFlipX = _inputMove.x < 0;
@@ -139,11 +146,11 @@ public class Player : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
 
-        // check Player jump
-        if(collision.gameObject.CompareTag("Block"))
-        {
-            _isJump = false;
-        }
+        //// check Player jump
+        //if(collision.gameObject.CompareTag("Platform"))
+        //{
+        //    _isJump = false;
+        //}
 
         // check enemy attack
         if((collision.gameObject.CompareTag("EnemyBullet") || collision.gameObject.CompareTag("Enemy")) && !_isHit)
@@ -299,6 +306,21 @@ public class Player : MonoBehaviour
         }
     }
 
+    void CheckJump()
+    {
+        
+        _ray = Physics2D.Raycast(transform.position, Vector3.down, _distance, LayerMask.GetMask("Platform"));
+        Debug.DrawRay(transform.position, Vector3.down * _distance, Color.green);
+        if(_ray.collider != null && _ray.distance < _distanceray)
+        {
+            Debug.Log($"{_ray.collider.gameObject.name}");
+            _isJump = false;
+        }
+        else if(_ray.collider == null)
+        {
+            _isJump = true;
+        }
+    }
 
     /// <summary>
     /// 공격 코루틴

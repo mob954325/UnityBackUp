@@ -8,7 +8,7 @@ TagManager:
   - PlayerBullet
   - EnemyBullet
   - Ladder
-  - Block
+  - Platform
   layers:
   - Default
   - TransparentFX
@@ -19,7 +19,7 @@ TagManager:
   - Enemy
   - Bullet
   - Player
-  - Ground
+  - Platform
   - 
   - 
   - 
