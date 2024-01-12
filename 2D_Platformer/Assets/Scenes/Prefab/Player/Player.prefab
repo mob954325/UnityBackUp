@@ -109,7 +109,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 6
   m_Sprite: {fileID: 21300000, guid: 041f56d6a022446e8b09e8a5be7f79ab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -133,14 +133,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a5dae1dc3fd6d41b77a5e3de77bd11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _maxScore: 9999
+  _score: 0
   _inputMove: {x: 0, y: 0}
   _bulletPos: {fileID: 1583586941767822500}
   _bullet: {fileID: 5940195591255570811, guid: dc67aa5263eee19408d03dab62da34fe, type: 3}
   _bulletHitEffect: {fileID: 1507440922060346707, guid: 4224a886ce70bc042aae3d0fd73b3fcf, type: 3}
   _bulletSpeed: 17
+  _shotDelay: 1
   _moveSpeed: 7.08
   _moveX: 0
-  _shotDelay: 1
   _jumpPower: 17
   _hitPower: 1.2
   _isFlipX: 0
@@ -148,6 +150,7 @@ MonoBehaviour:
   _isJump: 0
   _isCrouch: 0
   _isHit: 0
+  _canClimb: 0
 --- !u!95 &9033798415362217487
 Animator:
   serializedVersion: 5

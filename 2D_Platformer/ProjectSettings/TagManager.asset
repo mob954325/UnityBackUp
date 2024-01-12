@@ -9,7 +9,6 @@ TagManager:
   - EnemyBullet
   - Ladder
   - Block
-  - Ground
   layers:
   - Default
   - TransparentFX

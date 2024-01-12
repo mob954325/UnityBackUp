@@ -123,6 +123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   _hp: 1
+  _score: 10
   _deadEffect: {fileID: 3885288369525962863, guid: ed19785e00955664eb316e621551dbac, type: 3}
   _rayOffsetX: 3
   _rayOffsetY: -3
@@ -163,7 +164,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.12, y: -0.2}
+  m_Offset: {x: 0.120000005, y: -0.4615667}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -174,7 +175,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.3, y: 3.1}
+  m_Size: {x: 2.3, y: 3.6231332}
   m_EdgeRadius: 0
 --- !u!50 &8145458126956106390
 Rigidbody2D:
@@ -202,4 +203,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4

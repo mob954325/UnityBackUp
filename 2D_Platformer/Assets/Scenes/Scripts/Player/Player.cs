@@ -8,19 +8,18 @@ using Unity.Mathematics;
 
 public class Player : MonoBehaviour
 {
-    float _gravityScale = 3.5f;
     // Component
     PlayerInput _inputActions;
     Rigidbody2D _rigid;
     Animator _animator;
-    Animation _animation;
     SpriteRenderer _sprite;
 
+    // delegate
     Action<int> _changeScore;
 
     [Header("Score")]
-    [SerializeField]private int _maxScore = 9999;
-    [SerializeField]private int _score;
+    [SerializeField] private int _maxScore = 9999;
+    [SerializeField] private int _score;
     public int _Score
     {
         get => _score;
@@ -47,16 +46,22 @@ public class Player : MonoBehaviour
     readonly int isCrouch_String = Animator.StringToHash("isCrouch");
     readonly int isClimb_String = Animator.StringToHash("isClimb");
     readonly int doneClimb_String = Animator.StringToHash("doneClimb");
+
     const string isShot_string = "isShot";
     const string isRunningShot_string = "isRunningShot";
 
     [Header("#Player Stats")]
+    float _gravityScale = 3.5f;
+
     public float _bulletSpeed;
+    public float _shotDelay = 0.2f;
+
     public float _moveSpeed;
     public float _moveX;
-    public float _shotDelay = 0.2f;
+
     public float _jumpPower;
     public float _hitPower = 1.2f; // 피격 밀림 크기
+
     public bool _isFlipX = false; // 스프라이트 뒤집혀짐 여부
     public bool _isShot = false; // 사격 여부
     public bool _isJump = false; // 점프 여부
@@ -78,7 +83,6 @@ public class Player : MonoBehaviour
         _inputActions = new PlayerInput();
         _rigid = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
-        _animation = GetComponent<Animation>();
         _sprite = GetComponent<SpriteRenderer>();
     }
 
@@ -129,6 +133,7 @@ public class Player : MonoBehaviour
         {
             _inputMove.y = 0f;
         }
+
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -141,13 +146,11 @@ public class Player : MonoBehaviour
         }
 
         // check enemy attack
-        if(collision.gameObject.CompareTag("EnemyBullet") && !_isHit)
+        if((collision.gameObject.CompareTag("EnemyBullet") || collision.gameObject.CompareTag("Enemy")) && !_isHit)
         {
-            Debug.Log($"ATTACKED BY {collision.gameObject.name}");
-
-            Vector3 _hitDir = collision.transform.position;
+            Vector3 _hitDir = transform.position - collision.transform.position;
             _rigid.AddForce(_hitDir * _hitPower, ForceMode2D.Impulse);
-            _rigid.velocity = Vector3.zero;
+            //_rigid.velocity = Vector3.zero;
 
             StartCoroutine(Hit_Corutine());
         }
@@ -296,6 +299,11 @@ public class Player : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// 공격 코루틴
+    /// </summary>
+    /// <returns></returns>
     IEnumerator Shot_Corutine()
     {
         GameObject _bulletObj = Instantiate(_bullet, _bulletPos.transform.position, Quaternion.identity);

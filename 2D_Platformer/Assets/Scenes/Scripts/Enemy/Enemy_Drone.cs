@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Enemy_Drone : Enemy
 {
+    SpriteRenderer _spriteRenderer;
+
     [Header("#Ray info")]
     public float _rayOffsetX;
     public float _rayOffsetY;
@@ -17,12 +19,14 @@ public class Enemy_Drone : Enemy
     void Awake()
     {
         _moveDir = Vector3.right;
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
         transform.Translate(Time.deltaTime * _moveDir * _speed);
         CheckGround();
+        FlipX();
     }
 
     /// <summary>
@@ -37,14 +41,26 @@ public class Enemy_Drone : Enemy
         _rayTarget = Physics2D.Linecast(_startRay, _endRay, _targetMast);
         Debug.DrawRay(_startRay, (_endRay - _startRay));
 
-        if (_rayTarget.collider != null && _rayTarget.collider.gameObject.CompareTag("Ground"))
+        if (_rayTarget.collider != null && _rayTarget.collider.gameObject.CompareTag("Block"))
         {
-            Debug.Log($"tag : {_rayTarget.collider.gameObject.tag}");
+            //Debug.Log($"tag : {_rayTarget.collider.gameObject.tag}");
         }
         else if(_rayTarget.collider == null)
         {
             _rayOffsetX *= -1f;
             _speed *= -1f;
+        }
+    }
+
+    void FlipX()
+    {
+        if(_speed < 0)
+        {
+            _spriteRenderer.flipX = false;
+        }
+        else
+        {
+            _spriteRenderer.flipX = true;
         }
     }
 }
