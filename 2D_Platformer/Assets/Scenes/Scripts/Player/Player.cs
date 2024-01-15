@@ -313,7 +313,7 @@ public class Player : MonoBehaviour
         Debug.DrawRay(transform.position, Vector3.down * _distance, Color.green);
         if(_ray.collider != null && _ray.distance < _distanceray)
         {
-            Debug.Log($"{_ray.collider.gameObject.name}");
+            //Debug.Log($"{_ray.collider.gameObject.name}");
             _isJump = false;
         }
         else if(_ray.collider == null)

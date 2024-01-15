@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public enum Type { Drone, Turret }
+public enum Type { Drone, Turret, Boss}
 public class Enemy : MonoBehaviour
 {
     public Type type;
@@ -52,5 +52,4 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
 
     }
-
 }
