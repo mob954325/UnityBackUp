@@ -16,8 +16,8 @@ public class Player : MonoBehaviour
 
     // _ray
     RaycastHit2D _ray;
-    [SerializeField] float _distance = 0f;
-    [SerializeField] float _distanceray = 0f;
+    [SerializeField] float _distance = 0f; // 2.4f
+    [SerializeField] float _distanceray = 0f; // 2.24f
     
     // delegate
     Action<int> _changeScore;
@@ -157,7 +157,6 @@ public class Player : MonoBehaviour
         {
             Vector3 _hitDir = transform.position - collision.transform.position;
             _rigid.AddForce(_hitDir * _hitPower, ForceMode2D.Impulse);
-            //_rigid.velocity = Vector3.zero;
 
             StartCoroutine(Hit_Corutine());
         }
@@ -266,9 +265,12 @@ public class Player : MonoBehaviour
             if(_canClimb)
             {
                 _isJump = false;
-                _animator.SetTrigger(isClimb_String);
                 _inputMove.y = context.ReadValue<Vector2>().y;
-                _rigid.gravityScale = 0f;
+                if(MathF.Abs(_inputMove.y) > 0)
+                {
+                    _animator.SetTrigger(isClimb_String);
+                    _rigid.gravityScale = 0f;
+                }
             }
         } // performed
     }
@@ -316,7 +318,7 @@ public class Player : MonoBehaviour
             //Debug.Log($"{_ray.collider.gameObject.name}");
             _isJump = false;
         }
-        else if(_ray.collider == null)
+        else if(_ray.collider == null && !_canClimb)
         {
             _isJump = true;
         }

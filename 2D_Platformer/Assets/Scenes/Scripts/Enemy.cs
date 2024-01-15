@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     [Header("#Enemy Stats")]
     [SerializeField]private int _hp = 1;
     [SerializeField]private int _score = 10;
+    public float _speed;
     public int _Hp
     {
         get => _hp;
@@ -45,11 +46,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void OnDie()
+    protected virtual void OnDie()
     {
         Instantiate(_deadEffect, transform.position, Quaternion.identity);
         _onDie?.Invoke();
         Destroy(gameObject);
-
     }
 }

@@ -14,7 +14,7 @@ public class Enemy_Drone : Enemy
 
     [Header("#Stat Info")]
     public Vector3 _moveDir = Vector3.zero;
-    public float _speed;
+
 
     void Awake()
     {
