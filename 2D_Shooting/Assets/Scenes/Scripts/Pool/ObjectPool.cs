@@ -25,11 +25,6 @@ public class ObjectPool<T> : MonoBehaviour where T : RecycleObject
     /// </summary>
     Queue<T> readyQueue;
 
-    void Awake()
-    {
-        Initialize();
-    }
-
     public void Initialize()
     {
         if(pool == null) // 풀이 아직 안만들어짐
@@ -52,21 +47,33 @@ public class ObjectPool<T> : MonoBehaviour where T : RecycleObject
     /// <summary>
     /// 풀에서 사용하지 않는 오브젝트를 하나 꺼낸후 리턴하는 함수
     /// </summary>
+    /// <param name="eulerAngle">배치될 위치(월드 좌표)</param>
+    /// <param name="position">배치될 각도</param>
     /// <returns>풀에서 꺼낸 오브젝트(활성화됨)</returns>
-    public T GetObject()
+    public T GetObject(Vector3? position = null, Vector3? eulerAngle = null)
     {
-        if(readyQueue.Count > 0) // check readyqueue 
+        if (readyQueue.Count > 0) // check readyqueue 
         {
             T comp = readyQueue.Dequeue(); // 남아있으면 하나 꺼냄
             comp.gameObject.SetActive(true); // 활성화
+            comp.transform.position = position.GetValueOrDefault(); // 지정된 위치로 이동
+            comp.transform.Rotate(eulerAngle.GetValueOrDefault()); // 지정된 위치로 회전
+            OnGetObject(comp); // 오브젝트별 추가 처리
             return comp; // return
         }
         else
         {
             // readyqueue is empty == no object
             ExpandPool(); // expandPool twice
-            return GetObject(); // turn self
+            return GetObject(position, eulerAngle); // turn self
         }
+    }
+
+    /// <summary>
+    /// 각 오브젝트 별로 특별히 처리할 일이 있을 때가 있을 경우 실행하는 함수
+    /// </summary>
+    protected virtual void OnGetObject(T component)
+    {
     }
 
     /// <summary>

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 [RequireComponent(typeof(Animator))] // 반드시 특정 컴포넌트가 필요한 경우에 추가 -> 없으면 추가함
@@ -70,6 +69,21 @@ public class Player : MonoBehaviour
 
     public delegate int ScoreDelegate(int enemyScore);
     public ScoreDelegate PlayerGetScore;
+
+    /// <summary>
+    /// power test
+    /// </summary>
+    public int powerNum = 1;
+
+    public int PowerNum
+    {
+        get => powerNum;
+        private set 
+        {
+            powerNum = value;
+        }
+    }
+
 
     void Awake()
     {
@@ -169,7 +183,15 @@ public class Player : MonoBehaviour
     {
         while(true)
         {
-            Fire(fireTransform.position);
+            int angle = powerNum;
+            for(int i = 1; i <= PowerNum; i++)
+            {
+                if(i%2==0)
+                {
+                    angle *= -1;
+                }
+                Fire(fireTransform.position, angle/i);
+            }
             yield return new WaitForSeconds(fireInterval);
         }
     }
@@ -182,7 +204,9 @@ public class Player : MonoBehaviour
     void Fire(Vector3 position, float angle = 0.0f)
     {
         // fireFlash effect
-        Instantiate(bullet, position, Quaternion.identity);
+        // Instantiate(bullet, position, Quaternion.identity);
+        Factory.Instance.GetBullet(position, angle);
+
         StartCoroutine(Co_fireFlashEffect());
     }
 
@@ -202,7 +226,7 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // 충돌이 시작했을 때 실행
+/*        // 충돌이 시작했을 때 실행
         Debug.Log("OnCollisionEnter2D");
 
         Debug.Log($"Collider2D : {collision.gameObject.name}");
@@ -210,7 +234,7 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy")) // collision의 게임 오브젝트가 "Enemy"라는 태그를 가지는지 확인
         {
             Destroy(collision.gameObject); // 충돌한 대상을 제거
-        }
+        }*/
     }
 
     IEnumerator Co_fireFlashEffect()
@@ -228,5 +252,10 @@ public class Player : MonoBehaviour
     public void AddScore(int getScore)
     {
         Score += getScore;
+    }
+
+    public void PlayerPowerUp()
+    {
+        PowerNum++;
     }
 }

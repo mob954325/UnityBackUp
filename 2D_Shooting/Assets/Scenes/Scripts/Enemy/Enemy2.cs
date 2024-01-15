@@ -4,27 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Enemy2 : Enemy
+public class Enemy2 : EnemyBase
 {
     public float rotSpeed = 1.2f;
     public float chargeTime = 2f;
 
-    private int Hp
-    {
-        get => hp;
-        set
-        {
-            hp = value;
-            if (hp <= 0)
-            {
-                hp = 0;
-                OnDie();
-            }
-        }
-    }
-
     public GameObject target;
-    Player player;
 
     Vector3 targetPos;
     Vector3 playerPos;
@@ -33,7 +18,7 @@ public class Enemy2 : Enemy
 
     void Awake()
     {
-        player = GetComponent<Player>();
+//player = GetComponent<Player>();
     }
 
     void Start()
@@ -53,7 +38,7 @@ public class Enemy2 : Enemy
     {
         if(isCharged)
         {
-            transform.position += Time.deltaTime * targetPos * speed;
+            transform.position += Time.deltaTime * targetPos * moveSpeed;
         }
         else
         {
