@@ -8,6 +8,9 @@ using Unity.Mathematics;
 
 public class Player : MonoBehaviour
 {
+    Action _testAction;
+    public GameObject _afterImage;
+
     // Component
     PlayerInput _inputActions;
     Rigidbody2D _rigid;
@@ -51,12 +54,15 @@ public class Player : MonoBehaviour
     readonly int isCrouch_String = Animator.StringToHash("isCrouch");
     readonly int isClimb_String = Animator.StringToHash("isClimb");
     readonly int doneClimb_String = Animator.StringToHash("doneClimb");
+    readonly int isHit_String = Animator.StringToHash("isHit");
 
     const string isShot_string = "isShot";
     const string isRunningShot_string = "isRunningShot";
 
     [Header("#Player Stats")]
     float _gravityScale = 3.5f;
+
+    public float _dashPower;
 
     public float _bulletSpeed;
     public float _shotDelay = 0.2f;
@@ -67,6 +73,7 @@ public class Player : MonoBehaviour
     public float _jumpPower;
     public float _hitPower = 1.2f; // 피격 밀림 크기
 
+    [Header("#Bool Parameter")]
     public bool _isFlipX = false; // 스프라이트 뒤집혀짐 여부
     public bool _isShot = false; // 사격 여부
     public bool _isJump = false; // 점프 여부
@@ -91,6 +98,11 @@ public class Player : MonoBehaviour
         _sprite = GetComponent<SpriteRenderer>();
     }
 
+    void Start()
+    {
+        _testAction += () => StartCoroutine(_afterImage.GetComponent<Player_Afterimage>().CreateAfterImage());
+    }
+
     void OnEnable()
     {
         _inputActions.Player.Enable();
@@ -102,10 +114,14 @@ public class Player : MonoBehaviour
         _inputActions.Player.Fire.canceled += OnFire;
         _inputActions.Player.Crouch.performed += OnCrouch;
         _inputActions.Player.Crouch.canceled += OnCrouch;
+        _inputActions.Player.Dash.performed += OnDash;
+        _inputActions.Player.Dash.canceled += OnDash;        
     }
 
     void OnDisable()
     {
+        _inputActions.Player.Dash.canceled -= OnDash;
+        _inputActions.Player.Dash.performed -= OnDash;
         _inputActions.Player.Crouch.canceled -= OnCrouch;
         _inputActions.Player.Crouch.performed -= OnCrouch;
         _inputActions.Player.Fire.canceled -= OnFire;
@@ -274,6 +290,21 @@ public class Player : MonoBehaviour
             }
         } // performed
     }
+    void CheckJump()
+    {
+
+        _ray = Physics2D.Raycast(transform.position, Vector3.down, _distance, LayerMask.GetMask("Platform"));
+        Debug.DrawRay(transform.position, Vector3.down * _distance, Color.green);
+        if (_ray.collider != null && _ray.distance < _distanceray)
+        {
+            //Debug.Log($"{_ray.collider.gameObject.name}");
+            _isJump = false;
+        }
+        else if (_ray.collider == null && !_canClimb)
+        {
+            _isJump = true;
+        }
+    }
 
     private void OnFire(InputAction.CallbackContext context)
     {
@@ -308,21 +339,16 @@ public class Player : MonoBehaviour
         }
     }
 
-    void CheckJump()
+    private void OnDash(InputAction.CallbackContext context) // Player Dash
     {
-        
-        _ray = Physics2D.Raycast(transform.position, Vector3.down, _distance, LayerMask.GetMask("Platform"));
-        Debug.DrawRay(transform.position, Vector3.down * _distance, Color.green);
-        if(_ray.collider != null && _ray.distance < _distanceray)
+        if(context.performed)
         {
-            //Debug.Log($"{_ray.collider.gameObject.name}");
-            _isJump = false;
-        }
-        else if(_ray.collider == null && !_canClimb)
-        {
-            _isJump = true;
+            _rigid.AddForce(_inputMove * _dashPower * _moveSpeed, ForceMode2D.Impulse);
+            _testAction?.Invoke();
         }
     }
+
+
 
     /// <summary>
     /// 공격 코루틴
@@ -350,6 +376,7 @@ public class Player : MonoBehaviour
     {
         _sprite.color = new Color(0.5f, 0.5f, 0.5f, 1);
         _isHit = true;
+        _animator.SetTrigger(isHit_String);
         yield return new WaitForSeconds(1f);
         _sprite.color = Color.white;
         _isHit = false;

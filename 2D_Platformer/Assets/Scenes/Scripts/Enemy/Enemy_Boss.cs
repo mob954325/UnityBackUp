@@ -10,6 +10,7 @@ public class Enemy_Boss : Enemy
     public bool _isPlayerInAttackArea = false;
     public bool _isAttaked= false;
     public bool _isDead = false;
+    public bool _isDash = false;
     public float _attakDelay = 2.0f;
     float _originalSpeed;
 
@@ -45,6 +46,12 @@ public class Enemy_Boss : Enemy
     {
         if(!_isDead)
             CheckPlayer();
+    }
+
+    protected override void OnDie()
+    {
+        base.OnDie();
+        _deadEffect.GetComponent<SpriteRenderer>().flipX = !_isFlip;
     }
 
     void CheckPlayer()
@@ -86,7 +93,7 @@ public class Enemy_Boss : Enemy
                 if(!_isAttaked)
                 {
                     _speed = 0f;
-                    StartCoroutine(Co_Attack());
+                    StartCoroutine(Attack_Corutine());
                     _speed = _originalSpeed;
                 }
             }
@@ -115,7 +122,7 @@ public class Enemy_Boss : Enemy
         }
     }
 
-    IEnumerator Co_Attack()
+    IEnumerator Attack_Corutine()
     {
         _isAttaked = true;
         _animtor.SetBool(attack_String, true);
