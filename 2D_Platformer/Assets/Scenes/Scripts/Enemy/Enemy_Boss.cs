@@ -8,7 +8,7 @@ public class Enemy_Boss : Enemy
     public bool _isRunning = false;
     public bool _isFlip = false;
     public bool _isPlayerInAttackArea = false;
-    public bool _isAttaked= false;
+    public bool _isAttaked = false;
     public bool _isDead = false;
     public bool _isDash = false;
     public float _attakDelay = 2.0f;
@@ -28,8 +28,8 @@ public class Enemy_Boss : Enemy
     /// </summary>
     public float _minDistanceToTarget = 4.6f;
 
-    readonly int speed_String = Animator.StringToHash("speed");
-    readonly int attack_String = Animator.StringToHash("isAttack");
+    readonly int isAttack_String = Animator.StringToHash("isAttack");
+    readonly int isRunning_String = Animator.StringToHash("isRunning");
     readonly int isDead_String = Animator.StringToHash("isDead");
     SpriteRenderer _spriteRenderer;
     Animator _animtor;
@@ -61,7 +61,7 @@ public class Enemy_Boss : Enemy
 
         Debug.DrawRay(transform.position, Vector2.right * _scanRange, Color.red);
 
-        if(_rayTarget.collider == null)
+        if(_isAttaked)
         {
             _target = null;
         }
@@ -73,8 +73,7 @@ public class Enemy_Boss : Enemy
 
             FlipX(_distance);
 
-            _animtor.SetFloat(speed_String, Mathf.Abs(Time.deltaTime * _speed * _direction.x));
-
+            _animtor.SetBool(isRunning_String, !_isAttaked);
 
             if (_isPlayerInAttackArea)
                 return;
@@ -125,12 +124,12 @@ public class Enemy_Boss : Enemy
     IEnumerator Attack_Corutine()
     {
         _isAttaked = true;
-        _animtor.SetBool(attack_String, true);
+        _animtor.SetBool(isAttack_String, true);
         yield return new WaitForSeconds(0.4f);
         _attackArea.SetActive(true);
 
         yield return new WaitForSeconds(0.4f);
-        _animtor.SetBool(attack_String, false);
+        _animtor.SetBool(isAttack_String, false);
 
         _attackArea.SetActive(false);
 

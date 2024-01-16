@@ -8,8 +8,13 @@ using Unity.Mathematics;
 
 public class Player : MonoBehaviour
 {
-    Action _testAction;
+    [Header("# AfterImage Info")]
+    Action _dashAction;
+    public float _dashDelay;
     public GameObject _afterImage;
+    public Vector3 _dashSpot;
+    public Sprite _lastSprite;
+    Vector2 _lastInput;
 
     // Component
     PlayerInput _inputActions;
@@ -80,6 +85,7 @@ public class Player : MonoBehaviour
     public bool _isCrouch = false; // 앉기키 누름 여부
     public bool _isHit = false; // 피격 여부
     public bool _canClimb = false;
+    public bool _isDash = false;
 
     //public bool _isShotting_Anim = false;
 
@@ -100,7 +106,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        _testAction += () => StartCoroutine(_afterImage.GetComponent<Player_Afterimage>().CreateAfterImage());
+        _dashAction += () => StartCoroutine(_afterImage.GetComponent<Player_Afterimage>().CreateAfterImage());
     }
 
     void OnEnable()
@@ -138,6 +144,7 @@ public class Player : MonoBehaviour
         transform.Translate(Time.deltaTime * _inputMove * _moveSpeed);
 
         _animator.SetBool(isJump_String, _isJump);
+        _animator.SetFloat(speed_String, Mathf.Abs(_inputMove.x));
 
         CheckJump();
 
@@ -155,6 +162,11 @@ public class Player : MonoBehaviour
         if(!_canClimb)
         {
             _inputMove.y = 0f;
+        }
+
+        if(_isDash)
+        {
+            transform.Translate(Time.deltaTime * _lastInput * _dashPower * _moveSpeed);
         }
 
     }
@@ -221,12 +233,12 @@ public class Player : MonoBehaviour
             if (_isFlipX)
             {
                 _bulletPos.transform.localPosition = new Vector3(-1.9f, 0.3f, 0);
-                _inputMove.x = (-1)*(float)_animator.GetFloat(speed_String);
+                //_inputMove.x = (-1)*(float)_animator.GetFloat(speed_String);
             }
             else
             {
                 _bulletPos.transform.localPosition = new Vector3(1.9f, 0.3f, 0);
-                _inputMove.x = (float)_animator.GetFloat(speed_String);
+                //_inputMove.x = (float)_animator.GetFloat(speed_String);
             }
         }
 
@@ -247,10 +259,11 @@ public class Player : MonoBehaviour
 
     private void OnMove(InputAction.CallbackContext context)
     {
+        if (_isDash)
+            return;
+
         _inputMove = context.ReadValue<Vector2>();
         _inputMove.y = 0f;
-
-        _animator.SetFloat(speed_String, Mathf.Abs(_inputMove.x));
 
         if (context.performed)
         {
@@ -292,7 +305,6 @@ public class Player : MonoBehaviour
     }
     void CheckJump()
     {
-
         _ray = Physics2D.Raycast(transform.position, Vector3.down, _distance, LayerMask.GetMask("Platform"));
         Debug.DrawRay(transform.position, Vector3.down * _distance, Color.green);
         if (_ray.collider != null && _ray.distance < _distanceray)
@@ -341,14 +353,36 @@ public class Player : MonoBehaviour
 
     private void OnDash(InputAction.CallbackContext context) // Player Dash
     {
+        if (_inputMove == Vector2.zero)
+            return;
+
         if(context.performed)
         {
-            _rigid.AddForce(_inputMove * _dashPower * _moveSpeed, ForceMode2D.Impulse);
-            _testAction?.Invoke();
+            if (_isDash)
+                return;
+
+            _lastInput = _inputMove;
+
+            StartCoroutine(Dash_Corutine());
+            _isDash = true;
+            _dashSpot = transform.position;
+
+            _dashAction?.Invoke();
         }
     }
 
-
+    IEnumerator Dash_Corutine()
+    {
+        this.gameObject.layer = 11;
+        _lastSprite = _sprite.sprite;
+        _isDash = true;
+        _isHit = true;
+        yield return new WaitForSeconds(_dashDelay);
+        this.gameObject.layer = 8;
+        _isDash = false;
+        _isHit = false;
+        _inputMove = Vector2.zero;
+    }
 
     /// <summary>
     /// 공격 코루틴
