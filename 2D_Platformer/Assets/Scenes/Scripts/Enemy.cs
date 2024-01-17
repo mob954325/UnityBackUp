@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     Action _onDie;
 
     [Header("#Enemy Stats")]
+    public int _maxHp = 1;
     [SerializeField]private int _hp = 1;
     [SerializeField]private int _score = 10;
     public float _speed;

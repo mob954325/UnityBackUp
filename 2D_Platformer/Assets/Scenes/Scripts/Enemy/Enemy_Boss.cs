@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy_Boss : Enemy
 {
     [Header("#Parameters")]
+    public string _name;
     public bool _isRunning = false;
     public bool _isFlip = false;
     public bool _isPlayerInAttackArea = false;
@@ -51,6 +52,7 @@ public class Enemy_Boss : Enemy
 
     void OnEnable()
     {
+
         if(_target != null)
         {
 
@@ -129,11 +131,6 @@ public class Enemy_Boss : Enemy
                 _attackArea.transform.localPosition = new Vector3(_attackArea.transform.localPosition.x * (-1), _attackArea.transform.localPosition.y);
             }
         }
-    }
-
-    public void meetPlayer()
-    {
-        Debug.Log($"MEET THE PLAYER !!!");
     }
 
     IEnumerator Attack_Corutine()

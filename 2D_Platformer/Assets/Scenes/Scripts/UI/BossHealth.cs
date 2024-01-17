@@ -6,13 +6,10 @@ using UnityEngine.UI;
 
 public class BossHealth : MonoBehaviour
 {
-    Action _bossInfo;
     Scrollbar scrollbar;
     Enemy_Boss _boss;
 
-    float _curHealth;
-    float _maxHealth;
-    string _bossName;
+    float _Health;
 
     void Awake()
     {
@@ -20,12 +17,9 @@ public class BossHealth : MonoBehaviour
         _boss = FindAnyObjectByType<Enemy_Boss>();
     }
 
-    void Start()
-    {
-            _bossInfo += () => _boss.meetPlayer();
-    }
-
     void LateUpdate()
     {
+        float _curBossHealth = _boss._Hp;
+        scrollbar.size = _curBossHealth / 5;
     }
 }
