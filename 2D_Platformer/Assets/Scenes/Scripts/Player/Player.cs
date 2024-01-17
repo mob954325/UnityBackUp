@@ -106,6 +106,9 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        if (_afterImage == null)
+            Debug.LogError($"NEED _afterImage perfab object");
+
         _dashAction += () => StartCoroutine(_afterImage.GetComponent<Player_Afterimage>().CreateAfterImage());
     }
 
@@ -293,7 +296,6 @@ public class Player : MonoBehaviour
 
             if(_canClimb)
             {
-                _isJump = false;
                 _inputMove.y = context.ReadValue<Vector2>().y;
                 if(MathF.Abs(_inputMove.y) > 0)
                 {
@@ -320,7 +322,7 @@ public class Player : MonoBehaviour
 
     private void OnFire(InputAction.CallbackContext context)
     {
-        if (_isJump || _isShot)
+        if (_isJump || _isShot || _canClimb)
             return;
 
         if (context.performed)
@@ -381,7 +383,7 @@ public class Player : MonoBehaviour
         this.gameObject.layer = 8;
         _isDash = false;
         _isHit = false;
-        _inputMove = Vector2.zero;
+        //_inputMove = Vector2.zero;
     }
 
     /// <summary>

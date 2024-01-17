@@ -11,6 +11,7 @@ public class Enemy_Boss : Enemy
     public bool _isAttaked = false;
     public bool _isDead = false;
     public bool _isDash = false;
+    public bool _isMeet = false;
     public float _attakDelay = 2.0f;
     float _originalSpeed;
 
@@ -48,6 +49,14 @@ public class Enemy_Boss : Enemy
             CheckPlayer();
     }
 
+    void OnEnable()
+    {
+        if(_target != null)
+        {
+
+        }
+    }
+
     protected override void OnDie()
     {
         base.OnDie();
@@ -67,6 +76,7 @@ public class Enemy_Boss : Enemy
         }
         if (_rayTarget.collider != null && _rayTarget.collider.gameObject.CompareTag("Player"))
         {
+            _isMeet = true;
             _target = _rayTarget.collider.gameObject.transform; // player
             Vector3 _direction = _target.position - transform.position;
             float _distance = _target.position.magnitude - transform.position.magnitude;
@@ -119,6 +129,11 @@ public class Enemy_Boss : Enemy
                 _attackArea.transform.localPosition = new Vector3(_attackArea.transform.localPosition.x * (-1), _attackArea.transform.localPosition.y);
             }
         }
+    }
+
+    public void meetPlayer()
+    {
+        Debug.Log($"MEET THE PLAYER !!!");
     }
 
     IEnumerator Attack_Corutine()

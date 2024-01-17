@@ -59,7 +59,8 @@ MonoBehaviour:
   _isPlayerInAttackArea: 0
   _isAttaked: 0
   _isDead: 0
-  _attakDelay: 2
+  _isDash: 0
+  _attakDelay: 4
   _attackArea: {fileID: 5854976887968219678}
   _scanRange: 50
   _targetMast:
