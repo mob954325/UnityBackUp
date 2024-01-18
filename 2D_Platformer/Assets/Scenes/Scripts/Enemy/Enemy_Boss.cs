@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Enemy_Boss : Enemy
@@ -104,6 +105,7 @@ public class Enemy_Boss : Enemy
                 if(!_isAttaked)
                 {
                     _speed = 0f;
+                    _isAttaked = true;
                     StartCoroutine(Attack_Corutine());
                     _speed = _originalSpeed;
                 }
@@ -135,7 +137,6 @@ public class Enemy_Boss : Enemy
 
     IEnumerator Attack_Corutine()
     {
-        _isAttaked = true;
         _animtor.SetBool(isAttack_String, true);
         yield return new WaitForSeconds(0.4f);
         _attackArea.SetActive(true);

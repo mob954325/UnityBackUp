@@ -8,7 +8,8 @@ using Unity.Mathematics;
 
 public class Player : MonoBehaviour
 {
-    [Header("# AfterImage Info")]
+
+    [Header("#AfterImage Info")]
     Action _dashAction;
     public float _dashDelay;
     public GameObject _afterImage;
@@ -47,8 +48,31 @@ public class Player : MonoBehaviour
 
     }
 
+
     [Header("#Player Obj info")]
-    // valueable
+    Action _changeHpUI;
+    public GameObject _playerHealthUI;
+    private int _hp = 3;
+    public int _maxHp = 3;
+    public int _Hp
+    {
+        get => _hp;
+        set
+        {
+            if (_hp != value)
+            {
+                _hp = value;
+                _changeHpUI?.Invoke();
+
+                if (_hp <= 0)
+                {
+                    _hp = 0;
+                    // PlayerDead Function
+                }
+            }
+        }
+    }
+
     public Vector2 _inputMove = Vector2.zero;
     public GameObject _bulletPos;
     public GameObject _bullet;
@@ -87,8 +111,6 @@ public class Player : MonoBehaviour
     public bool _canClimb = false;
     public bool _isDash = false;
 
-    //public bool _isShotting_Anim = false;
-
     public void AddScore(int getScore)
     {
         _score += getScore;
@@ -96,6 +118,7 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
+        _Hp = _maxHp;
         _gravityScale = 3.5f;
 
         _inputActions = new PlayerInput();
@@ -108,8 +131,11 @@ public class Player : MonoBehaviour
     {
         if (_afterImage == null)
             Debug.LogError($"NEED _afterImage perfab object");
+        if (_changeHpUI == null)
+            Debug.LogError($"NEED _changeHpUI perfab object");
 
         _dashAction += () => StartCoroutine(_afterImage.GetComponent<Player_Afterimage>().CreateAfterImage());
+        _changeHpUI += () => _playerHealthUI.GetComponent<PlayerHealth>().ChangeHealth();
     }
 
     void OnEnable()
@@ -373,6 +399,10 @@ public class Player : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 대쉬 코루틴
+    /// </summary>
+    /// <returns></returns>
     IEnumerator Dash_Corutine()
     {
         this.gameObject.layer = 11;
@@ -410,10 +440,15 @@ public class Player : MonoBehaviour
     /// <returns></returns>
     IEnumerator Hit_Corutine()//
     {
-        _sprite.color = new Color(0.5f, 0.5f, 0.5f, 1);
+        _sprite.color = new Color(0.5f, 0.5f, 0.5f, 1); // 피격 이펙트
+
         _isHit = true;
         _animator.SetTrigger(isHit_String);
+
+        _Hp--;
+    
         yield return new WaitForSeconds(1f);
+
         _sprite.color = Color.white;
         _isHit = false;
     }
