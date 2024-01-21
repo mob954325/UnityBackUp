@@ -9,6 +9,7 @@ TagManager:
   - EnemyBullet
   - Ladder
   - Platform
+  - StageEnd
   layers:
   - Default
   - TransparentFX

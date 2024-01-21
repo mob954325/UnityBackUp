@@ -141,6 +141,8 @@ MonoBehaviour:
   _distanceray: 2.24
   _maxScore: 9999
   _score: 0
+  _playerHealthUI: {fileID: 1649099515518318732, guid: d770ede67fe4cbc4498d2eebe6fa3c9a, type: 3}
+  _maxHp: 3
   _inputMove: {x: 0, y: 0}
   _bulletPos: {fileID: 1583586941767822500}
   _bullet: {fileID: 5940195591255570811, guid: dc67aa5263eee19408d03dab62da34fe, type: 3}

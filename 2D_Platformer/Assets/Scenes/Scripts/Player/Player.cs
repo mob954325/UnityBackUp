@@ -49,8 +49,8 @@ public class Player : MonoBehaviour
     }
 
 
-    [Header("#Player Obj info")]
     Action _changeHpUI;
+    [Header("#Player Obj info")]
     public GameObject _playerHealthUI;
     private int _hp = 3;
     public int _maxHp = 3;
@@ -131,7 +131,7 @@ public class Player : MonoBehaviour
     {
         if (_afterImage == null)
             Debug.LogError($"NEED _afterImage perfab object");
-        if (_changeHpUI == null)
+        if (_playerHealthUI == null)
             Debug.LogError($"NEED _changeHpUI perfab object");
 
         _dashAction += () => StartCoroutine(_afterImage.GetComponent<Player_Afterimage>().CreateAfterImage());
@@ -224,6 +224,10 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Ladder"))
         {
             _canClimb = true;
+        }
+        if(collision.gameObject.CompareTag("StageEnd"))
+        {
+            Debug.Log($"Stage End");
         }
     }
 
