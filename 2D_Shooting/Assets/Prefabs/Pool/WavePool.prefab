@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5765290225809920313
+--- !u!1 &2124012951465063489
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6847321902804617225}
-  - component: {fileID: 3228390656292304843}
+  - component: {fileID: 84118225645089613}
+  - component: {fileID: 6022856619979038560}
   m_Layer: 0
   m_Name: WavePool
   m_TagString: Untagged
@@ -17,32 +17,32 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6847321902804617225
+--- !u!4 &84118225645089613
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5765290225809920313}
+  m_GameObject: {fileID: 2124012951465063489}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.923998, y: 0.21903312, z: -0.29195055}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3228390656292304843
+--- !u!114 &6022856619979038560
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5765290225809920313}
+  m_GameObject: {fileID: 2124012951465063489}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42bb3b45b4658f449b355e5c0b16b3f8, type: 3}
+  m_Script: {fileID: 11500000, guid: 16626937a5df4fb46bcf060b0a1aafed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalPrefab: {fileID: 4717844887153653628, guid: 59afa9c032778a949b0f73b7dae5e764, type: 3}
+  originalPrefab: {fileID: 4893882955656531163, guid: d82a3116b97807a49bcaa1f35b580838, type: 3}
   poolSize: 8

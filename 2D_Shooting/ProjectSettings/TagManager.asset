@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Enemy
   - Bullet
+  - PowerUp
+  - Border
   layers:
   - Default
   - TransparentFX
@@ -16,9 +18,9 @@ TagManager:
   - Player
   - Enemy
   - PlayerBullet
-  - 
-  - 
-  - 
+  - Border
+  - Item
+  - InvinciblePlayer
   - 
   - 
   - 
@@ -44,14 +46,14 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: Background
-    uniqueID: 3586801813
+    uniqueID: 3841538327
     locked: 0
   - name: Bullet
-    uniqueID: 3772042991
+    uniqueID: 1775408099
     locked: 0
   - name: Enemy
-    uniqueID: 1304473029
+    uniqueID: 2376020365
     locked: 0
   - name: Player
-    uniqueID: 1205156837
+    uniqueID: 2092740953
     locked: 0
