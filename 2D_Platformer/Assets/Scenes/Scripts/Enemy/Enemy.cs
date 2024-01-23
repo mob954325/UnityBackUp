@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
 {
     public Type type;
 
-    Action _onDie;
+    public Action _onDie;
 
     [Header("#Enemy Stats")]
     public int _maxHp = 1;

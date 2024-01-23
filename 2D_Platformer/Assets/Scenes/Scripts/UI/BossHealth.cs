@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class BossHealth : MonoBehaviour
 {
     Scrollbar scrollbar;
-    Enemy_Boss _boss;
+    public Enemy_Boss _boss;
 
     float _Health;
 
@@ -21,5 +21,15 @@ public class BossHealth : MonoBehaviour
     {
         float _curBossHealth = _boss._Hp;
         scrollbar.size = _curBossHealth / 5;
+
+        if(_curBossHealth <= 0)
+        {
+            BossDead();
+        }
+    }
+
+    public void BossDead()
+    {
+        gameObject.SetActive(false);
     }
 }

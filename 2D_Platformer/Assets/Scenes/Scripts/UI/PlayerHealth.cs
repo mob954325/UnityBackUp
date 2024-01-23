@@ -6,21 +6,23 @@ public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private GameObject[] _playerHealthObject;
     Player _player;
-    int _playerHealthNum;
-    int _curDisableHealthNum;
+    int _playerMaxHp;
+    int _playerCurrentHp;
 
 
     void Awake()
     {
-        _player = FindAnyObjectByType<Player>();    
+        _player = FindAnyObjectByType<Player>();  
     }
 
     void OnEnable()
     {
-        _curDisableHealthNum = 0;
-        _playerHealthNum = _player._maxHp;
-        _playerHealthObject = new GameObject[_playerHealthNum];
-        for(int i = 0; i < _playerHealthNum; i++)
+        // init value
+        _playerCurrentHp = _player._Hp;
+        _playerMaxHp = _player._maxHp;
+
+        _playerHealthObject = new GameObject[_playerMaxHp];
+        for(int i = 0; i < _playerMaxHp; i++)
         {
             _playerHealthObject[i] = transform.GetChild(i).transform.GetChild(0).gameObject;
         }
@@ -28,11 +30,17 @@ public class PlayerHealth : MonoBehaviour
 
     public void ChangeHealth()
     {
-        _curDisableHealthNum++;
+        // check
+        _playerCurrentHp = _player._Hp;
+        _playerMaxHp = _player._maxHp;
 
-        for(int i = 1; i <= _curDisableHealthNum; i++)
+        int _changeHealthNum = _playerMaxHp - _playerCurrentHp;
+
+        Debug.Log($"{_changeHealthNum}");
+        for(int i = 0; i < _changeHealthNum; i++)
         {
-            _playerHealthObject[_playerHealthNum - i].SetActive(false);
+            // max - cur = 현재 비활성화할 체력 수
+            _playerHealthObject[i].SetActive(false);
         }
     }
 }

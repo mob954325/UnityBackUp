@@ -133,8 +133,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  _maxHp: 1
   _hp: 1
   _score: 10
+  _speed: 0
   _deadEffect: {fileID: 3885288369525962863, guid: ed19785e00955664eb316e621551dbac, type: 3}
   _bullet: {fileID: 5940195591255570811, guid: dc67aa5263eee19408d03dab62da34fe, type: 3}
   _bulletHitEffect: {fileID: 1507440922060346707, guid: 4224a886ce70bc042aae3d0fd73b3fcf, type: 3}
@@ -225,7 +227,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 100000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1

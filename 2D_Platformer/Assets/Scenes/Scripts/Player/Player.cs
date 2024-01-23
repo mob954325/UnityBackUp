@@ -48,9 +48,9 @@ public class Player : MonoBehaviour
 
     }
 
-
-    Action _changeHpUI;
     [Header("#Player Obj info")]
+    Action _isMeetBoss;
+    Action _changeHpUI;
     public GameObject _playerHealthUI;
     private int _hp = 3;
     public int _maxHp = 3;
@@ -62,13 +62,13 @@ public class Player : MonoBehaviour
             if (_hp != value)
             {
                 _hp = value;
-                _changeHpUI?.Invoke();
-
                 if (_hp <= 0)
                 {
                     _hp = 0;
                     // PlayerDead Function
                 }
+                _changeHpUI?.Invoke();
+
             }
         }
     }
@@ -136,6 +136,7 @@ public class Player : MonoBehaviour
 
         _dashAction += () => StartCoroutine(_afterImage.GetComponent<Player_Afterimage>().CreateAfterImage());
         _changeHpUI += () => _playerHealthUI.GetComponent<PlayerHealth>().ChangeHealth();
+        _isMeetBoss += () => GameManager.instance.pManager.ShowBossHp();
     }
 
     void OnEnable()
@@ -228,6 +229,12 @@ public class Player : MonoBehaviour
         if(collision.gameObject.CompareTag("StageEnd"))
         {
             Debug.Log($"Stage End");
+        }
+
+        if(collision.gameObject.name == "EnterBossRoom")
+        {
+            GameManager.instance.pManager._isMeetBoss = true;
+            _isMeetBoss?.Invoke();
         }
     }
 
@@ -442,7 +449,7 @@ public class Player : MonoBehaviour
     /// 피격 코루틴 함수
     /// </summary>
     /// <returns></returns>
-    IEnumerator Hit_Corutine()//
+    IEnumerator Hit_Corutine()
     {
         _sprite.color = new Color(0.5f, 0.5f, 0.5f, 1); // 피격 이펙트
 

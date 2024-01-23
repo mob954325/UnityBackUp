@@ -45,6 +45,12 @@ public class Enemy_Boss : Enemy
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animtor = GetComponent<Animator>();
     }
+
+    protected override void Start()
+    {
+        base.Start();
+    }
+
     void Update()
     {
         if(!_isDead)
@@ -64,6 +70,7 @@ public class Enemy_Boss : Enemy
     {
         base.OnDie();
         _deadEffect.GetComponent<SpriteRenderer>().flipX = !_isFlip;
+
     }
 
     void CheckPlayer()
