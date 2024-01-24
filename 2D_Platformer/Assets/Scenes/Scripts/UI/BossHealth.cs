@@ -20,7 +20,7 @@ public class BossHealth : MonoBehaviour
     void LateUpdate()
     {
         float _curBossHealth = _boss._Hp;
-        scrollbar.size = _curBossHealth / 5;
+        scrollbar.size = _curBossHealth / _boss._maxHp;
 
         if(_curBossHealth <= 0)
         {

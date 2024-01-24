@@ -10,6 +10,8 @@ TagManager:
   - Ladder
   - Platform
   - StageEnd
+  - Block
+  - CheckPoint
   layers:
   - Default
   - TransparentFX

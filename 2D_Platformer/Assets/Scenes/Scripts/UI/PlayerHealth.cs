@@ -37,10 +37,15 @@ public class PlayerHealth : MonoBehaviour
         int _changeHealthNum = _playerMaxHp - _playerCurrentHp;
 
         Debug.Log($"{_changeHealthNum}");
+        for (int i = _playerCurrentHp - 1; i <= 0; i--)
+        {
+            _playerHealthObject[i].SetActive(true);
+        }
         for(int i = 0; i < _changeHealthNum; i++)
         {
             // max - cur = 현재 비활성화할 체력 수
             _playerHealthObject[i].SetActive(false);
         }
+
     }
 }

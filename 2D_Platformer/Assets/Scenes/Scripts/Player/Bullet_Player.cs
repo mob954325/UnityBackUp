@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Bullet_Player : Bullet
 {
+    float _durationTime = 2f;
+
     bool _isFlip = false;
     public Player _player;
     SpriteRenderer _sprite;
@@ -16,6 +18,7 @@ public class Bullet_Player : Bullet
     void Start()
     {
         _isFlip = _player._isFlipX;
+        Destroy(gameObject, _durationTime);
     }
 
     public override void Active()
@@ -33,7 +36,8 @@ public class Bullet_Player : Bullet
 
     public override void CompareCollider(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy")
+            || collision.gameObject.CompareTag("Platform"))
         {
             Instantiate(_hitEffect, transform.position, Quaternion.identity);
         }

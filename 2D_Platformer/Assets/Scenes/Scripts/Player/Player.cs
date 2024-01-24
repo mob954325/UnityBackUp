@@ -222,13 +222,20 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        if(collision.gameObject.CompareTag("CheckPoint"))
+        {
+            _Hp = _maxHp;
+        }
+
         if (collision.gameObject.CompareTag("Ladder"))
         {
             _canClimb = true;
         }
+
         if(collision.gameObject.CompareTag("StageEnd"))
         {
             Debug.Log($"Stage End");
+            GameManager.instance.pManager.VictoryPanel.SetActive(true);
         }
 
         if(collision.gameObject.name == "EnterBossRoom")
@@ -380,7 +387,7 @@ public class Player : MonoBehaviour
         {
             if (_inputMove.x != 0 || _isCrouch)
             {
-                _animator.SetTrigger(isRunningShot_string);
+                //_animator.SetTrigger(isRunningShot_string);
             }
             else
             {

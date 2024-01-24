@@ -50,19 +50,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
+  _maxHp: 5
   _hp: 5
   _score: 10
   _speed: 7
   _deadEffect: {fileID: 8946876756980869880, guid: 7a1ab8508fd777f4cb954c058af0a2c7, type: 3}
+  _name: 
   _isRunning: 0
   _isFlip: 0
   _isPlayerInAttackArea: 0
   _isAttaked: 0
   _isDead: 0
   _isDash: 0
+  _isMeet: 0
   _attakDelay: 4
   _attackArea: {fileID: 5854976887968219678}
-  _scanRange: 50
+  _scanRange: 30
   _targetMast:
     serializedVersion: 2
     m_Bits: 256

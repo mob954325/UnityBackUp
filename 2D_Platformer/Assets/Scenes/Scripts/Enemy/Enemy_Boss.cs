@@ -80,11 +80,9 @@ public class Enemy_Boss : Enemy
 
         Debug.DrawRay(transform.position, Vector2.right * _scanRange, Color.red);
 
-        if(_isAttaked)
-        {
-            _target = null;
-        }
-        if (_rayTarget.collider != null && _rayTarget.collider.gameObject.CompareTag("Player"))
+        _animtor.SetBool(isRunning_String, _isRunning);
+
+        if (_rayTarget.collider != null && _rayTarget.collider.gameObject.CompareTag("Player") && !_isAttaked)
         {
             _isMeet = true;
             _target = _rayTarget.collider.gameObject.transform; // player
@@ -92,8 +90,6 @@ public class Enemy_Boss : Enemy
             float _distance = _target.position.magnitude - transform.position.magnitude;
 
             FlipX(_distance);
-
-            _animtor.SetBool(isRunning_String, !_isAttaked);
 
             if (_isPlayerInAttackArea)
                 return;
@@ -148,7 +144,7 @@ public class Enemy_Boss : Enemy
         yield return new WaitForSeconds(0.4f);
         _attackArea.SetActive(true);
 
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.3f);
         _animtor.SetBool(isAttack_String, false);
 
         _attackArea.SetActive(false);
