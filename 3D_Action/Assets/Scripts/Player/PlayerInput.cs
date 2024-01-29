@@ -11,10 +11,12 @@ public class PlayerInput : MonoBehaviour
     Rigidbody rigid;
 
     // player input values
-    Vector3 playerInput;
+    public Vector3 playerInput;
+    public GameObject target;
 
     // player Stats
     public float speed = 5.0f;
+    public float rotSpeed = 0.05f;
 
     void Awake()
     {
@@ -39,7 +41,23 @@ public class PlayerInput : MonoBehaviour
 
     void FixedUpdate()
     {
-        rigid.MovePosition(rigid.position + playerInput * speed);
+        Vector3 moveDir = new Vector3(playerInput.x, 0, playerInput.y);
+
+        Vector3 rotDir = Vector3.zero;
+        Vector3 effectiveDirection = Vector3.zero;
+        rotDir.x = moveDir.x;
+        rotDir.z = moveDir.z;
+        rotDir.Normalize();
+
+        if(rotDir.magnitude > 0.01f)
+        {
+            float lookAngle = Mathf.Atan2(rotDir.x, rotDir.z) * Mathf.Rad2Deg; // 각도 변환
+            float angle = Mathf.LerpAngle(transform.rotation.eulerAngles.y, lookAngle, rotSpeed); // 현재각도, 플레이어가 입력한 각도
+            transform.rotation = Quaternion.Euler(0, angle, 0); // rotate 설정
+        }
+
+        //effectiveDirection = Vector3.Lerp(effectiveDirection, rotDir, 0.02f);
+        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveDir * speed);
     }
 
     private void OnMoveInput(InputAction.CallbackContext context)
