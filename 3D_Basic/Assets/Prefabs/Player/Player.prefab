@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5758460889190845819}
   - component: {fileID: 6691514295925911352}
   - component: {fileID: 1487710293809084379}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4144243928034855105}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ShoulderL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3506346872898878022}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HipJointR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 6524751561231864714}
   - component: {fileID: 6772701604885705232}
   - component: {fileID: 5641723555871448366}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,7 +244,7 @@ GameObject:
   - component: {fileID: 6654266660415565996}
   - component: {fileID: 8673437242566059527}
   - component: {fileID: 8730329888309583198}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Nose
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -327,7 +327,7 @@ GameObject:
   - component: {fileID: 5018619517781167136}
   - component: {fileID: 2230828044138740365}
   - component: {fileID: 985508477355566692}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EyeRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -410,7 +410,7 @@ GameObject:
   - component: {fileID: 4585352628297255596}
   - component: {fileID: 5135774031831020852}
   - component: {fileID: 5870369857828082784}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -491,7 +491,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6368184940286129190}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HipJointL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -528,9 +528,9 @@ GameObject:
   - component: {fileID: 4875443731825388688}
   - component: {fileID: 7031231812027300337}
   - component: {fileID: 8215427853476060455}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -606,7 +606,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: Infinity
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -685,7 +685,7 @@ GameObject:
   - component: {fileID: 4674295644502200072}
   - component: {fileID: 7110384620732857874}
   - component: {fileID: 7798990454142507839}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -768,7 +768,7 @@ GameObject:
   - component: {fileID: 2545883908440207411}
   - component: {fileID: 7524049376359098523}
   - component: {fileID: 3165050980743729151}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EyeLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -851,7 +851,7 @@ GameObject:
   - component: {fileID: 6181195785838989033}
   - component: {fileID: 4972821686569277634}
   - component: {fileID: 1885173663025285791}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ArmLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -932,7 +932,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7532622709025184546}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ShoulderR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -966,7 +966,7 @@ GameObject:
   - component: {fileID: 6735855220418782628}
   - component: {fileID: 493485847191867068}
   - component: {fileID: 7384703202361974145}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ArmRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

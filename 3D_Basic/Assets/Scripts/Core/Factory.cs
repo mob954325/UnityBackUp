@@ -12,7 +12,7 @@ public enum PoolObjectType
 
 public class Factory : Singleton<Factory>
 {
-    BulletPool bullet;
+    BulletPool bulletPool;
 
     /// <summary>
     /// 초기화
@@ -21,9 +21,9 @@ public class Factory : Singleton<Factory>
     {
         base.OnInitialize();
 
-        bullet = GetComponentInChildren<BulletPool>();
-        if (bullet != null)
-            bullet.Initialize();
+        bulletPool = GetComponentInChildren<BulletPool>();
+        if (bulletPool != null)
+            bulletPool.Initialize();
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public class Factory : Singleton<Factory>
         switch(type)
         {
             case PoolObjectType.TurretBullet:
-                result = bullet.GetObject(position, euler).gameObject;
+                result = bulletPool.GetObject(position, euler).gameObject;
                 break;
         }
 
@@ -50,11 +50,11 @@ public class Factory : Singleton<Factory>
     // Get(Obejct) Functions
     public Bullet GetBullet()
     {
-        return bullet.GetObject();
+        return bulletPool.GetObject();
     }
 
     public Bullet GetBullet(Vector3 position, float angle = 0.0f)
     {
-        return bullet.GetObject(position, angle * Vector3.forward);
+        return bulletPool.GetObject(position, angle * Vector3.forward);
     }
 }

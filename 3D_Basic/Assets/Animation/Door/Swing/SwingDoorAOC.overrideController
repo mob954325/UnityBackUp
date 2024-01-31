@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SwingDoorAOC
+  m_Controller: {fileID: 9100000, guid: a22f6e2e8a4f89a47b95e2a331d6c381, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: deff7ebb4bb001c46b453ccab69c94a9, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: deff7ebb4bb001c46b453ccab69c94a9, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: a45a5bf379a487842adc058e032077fd, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a45a5bf379a487842adc058e032077fd, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 4cc9cb7a630910e4f836f20323bff48b, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 4cc9cb7a630910e4f836f20323bff48b, type: 2}

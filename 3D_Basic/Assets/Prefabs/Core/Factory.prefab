@@ -93,6 +93,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4893610913497246970, guid: 8db7f3a524c43a74ab2335ee2bf2550c, type: 3}
+      propertyPath: poolSize
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7813085286405341775, guid: 8db7f3a524c43a74ab2335ee2bf2550c, type: 3}
       propertyPath: m_Name
       value: BulletPool

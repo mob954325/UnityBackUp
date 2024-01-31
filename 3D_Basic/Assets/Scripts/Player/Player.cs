@@ -112,7 +112,7 @@ public class Player : MonoBehaviour
 
         if(jumpCoolRemain < 0)
         {
-            Debug.Log("Jump Ready");
+            //Debug.Log("Jump Ready");
         }
     }
 
@@ -162,6 +162,7 @@ public class Player : MonoBehaviour
 
         // 현재 회전에서 rotate만큼 추가로 회전
         rigid.MoveRotation(rigid.rotation * rotate);
+
     }
 
     /// <summary>
