@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     public float rotationPower = 5.0f;
 
     // player's Transform objects
-    public Transform followTransform;
+    public Transform cameraFollowTransform;
     public Transform playerModel;
 
     public float rotationLerp = 1.2f;
@@ -121,15 +121,15 @@ public class PlayerController : MonoBehaviour
         // Rotate the follow target transfrom based on input
 
         // leftright
-        followTransform.transform.rotation *= Quaternion.AngleAxis(mouseInput.x * rotationPower, Vector3.up);
+        cameraFollowTransform.transform.rotation *= Quaternion.AngleAxis(mouseInput.x * rotationPower, Vector3.up);
 
         // updown
-        followTransform.transform.rotation *= Quaternion.AngleAxis(mouseInput.y * -rotationPower, Vector3.right);
+        cameraFollowTransform.transform.rotation *= Quaternion.AngleAxis(mouseInput.y * -rotationPower, Vector3.right);
 
-        var angles = followTransform.transform.localEulerAngles;
+        Vector3 angles = cameraFollowTransform.transform.localEulerAngles;
         angles.z = 0;
 
-        var angle = followTransform.transform.localEulerAngles.x;
+        float angle = cameraFollowTransform.transform.localEulerAngles.x;
 
         // Clamp the up/down rotation
         if(angle > 180 && angle < 340)
@@ -141,15 +141,15 @@ public class PlayerController : MonoBehaviour
             angles.x = 40;
         }
 
-        followTransform.transform.localEulerAngles = angles;
+        cameraFollowTransform.transform.localEulerAngles = angles;
 
         #endregion
 
         // Set the player rotation based on the look transform
-        //transform.rotation = Quaternion.Euler(0, followTransform.transform.eulerAngles.y, 0);
+        //transform.rotation = Quaternion.Euler(0, cameraFollowTransform.transform.eulerAngles.y, 0);
 
         // Reset the y rotation of the look transform
-        followTransform.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
+        cameraFollowTransform.transform.localEulerAngles = new Vector3(angles.x, angles.y, 0);
 
     }
 
@@ -165,23 +165,27 @@ public class PlayerController : MonoBehaviour
 
         if(rotDirection.magnitude > 0.01f)
         {
-            float lookAngle = Mathf.Atan2(rotDirection.x, rotDirection.z) * Mathf.Rad2Deg;
+            float lookAngle = Mathf.Atan2(rotDirection.x, rotDirection.z) * Mathf.Rad2Deg; // 회전할 방향
 
-           // float angle = Mathf.LerpAngle(playerModel.rotation.eulerAngles.y, lookAngle, rotSpeed);
-            float angle = Mathf.LerpAngle(playerModel.localRotation.eulerAngles.y, lookAngle, rotSpeed);
+            //lookAngle += cameraFollowTransform.localRotation.y;
 
-            //playerModel.rotation = Quaternion.Euler(0, angle, 0); // rotate Player model
-            playerModel.localRotation = Quaternion.Euler(0, angle, 0); // rotate Player model
+            //float angle = Mathf.LerpAngle(transform.rotation.eulerAngles.y, lookAngle, rotSpeed);
+
+            //transform.rotation = Quaternion.Euler(0, angle, 0); // rotate Player model
         }
+        float angle = Mathf.LerpAngle(playerModel.localRotation.eulerAngles.y, cameraFollowTransform.rotation.eulerAngles.y, rotSpeed * Time.fixedDeltaTime);
+        playerModel.localRotation = Quaternion.Euler(0, angle, 0); // rotate Player model
     }
 
     void playerMove()
     {
         // calculate movement direction
-        moveDirection = transform.forward * inputVertical + transform.right * inputHorizontal;
+        moveDirection = cameraFollowTransform.forward * inputVertical + cameraFollowTransform.right * inputHorizontal; // Player Move Direction
 
         //rigid.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
-        rigid.MovePosition(rigid.position + moveDirection.normalized * moveSpeed * Time.fixedDeltaTime);
+        rigid.MovePosition(rigid.position + moveDirection.normalized * moveSpeed * Time.fixedDeltaTime); // player Move position
+
+        playerModel.position = transform.position + moveDirection.normalized * Time.fixedDeltaTime;
     }
 
     void PlayAnimMove()
