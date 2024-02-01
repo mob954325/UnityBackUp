@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public float rotSpeed = 0.3f;
     [Range(0f,1f)]
     public float rotationPower = 5.0f;
+    public float jumpPower = 5.0f;
 
     // player's Transform objects
     public Transform cameraFollowTransform;
@@ -36,6 +37,10 @@ public class PlayerController : MonoBehaviour
     // player animator
     readonly int inputVertical_String = Animator.StringToHash("Vertical"); // input.z
     readonly int inputHorizontal_String = Animator.StringToHash("Horizontal"); // input.x
+    readonly int jump_String = Animator.StringToHash("Jump"); // Jump
+
+    // player Parameter
+    bool isJump = false;
 
     void Awake()
     {
@@ -60,6 +65,7 @@ public class PlayerController : MonoBehaviour
         actions.Player.Move.performed += OnMoveInput;
         actions.Player.Move.canceled += OnMoveInput;
         actions.Player.Jump.performed += OnJumpInput;
+        actions.Player.Jump.canceled += OnJumpInput;
         actions.Player.Look.performed += OnLookInput;
         actions.Player.Look.canceled += OnLookInput;
     }
@@ -73,6 +79,7 @@ public class PlayerController : MonoBehaviour
     {
         actions.Player.Look.canceled -= OnLookInput;
         actions.Player.Look.performed -= OnLookInput;
+        actions.Player.Jump.canceled -= OnJumpInput;
         actions.Player.Jump.performed -= OnJumpInput;
         actions.Player.Move.canceled -= OnMoveInput;
         actions.Player.Move.performed -= OnMoveInput;
@@ -90,6 +97,14 @@ public class PlayerController : MonoBehaviour
         PlayAnimMove();
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            isJump = false;
+        }
+    }
+
     private void OnMoveInput(InputAction.CallbackContext context)
     {
         playerInput = context.ReadValue<Vector3>();
@@ -104,17 +119,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnJumpInput(InputAction.CallbackContext context)
     {
-        throw new NotImplementedException();
+        if(!isJump)
+        {
+            animator.SetTrigger(jump_String);
+            rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            isJump = true;
+        }
     }
 
     void rotateCamera()
     {
-        #region Follow Transform Rotataion
-
-        // Rotate Player based on input
-        //transform.rotation *= Quaternion.AngleAxis(mouseInput.x * rotationPower, Vector3.up);
-
-        #endregion
 
         #region Vertical Rotation
 
@@ -145,9 +159,6 @@ public class PlayerController : MonoBehaviour
 
         #endregion
 
-        // Set the player rotation based on the look transform
-        //transform.rotation = Quaternion.Euler(0, cameraFollowTransform.transform.eulerAngles.y, 0);
-
         // Reset the y rotation of the look transform
         cameraFollowTransform.transform.localEulerAngles = new Vector3(angles.x, angles.y, 0);
 
@@ -166,12 +177,6 @@ public class PlayerController : MonoBehaviour
         if(rotDirection.magnitude > 0.01f)
         {
             float lookAngle = Mathf.Atan2(rotDirection.x, rotDirection.z) * Mathf.Rad2Deg; // 회전할 방향
-
-            //lookAngle += cameraFollowTransform.localRotation.y;
-
-            //float angle = Mathf.LerpAngle(transform.rotation.eulerAngles.y, lookAngle, rotSpeed);
-
-            //transform.rotation = Quaternion.Euler(0, angle, 0); // rotate Player model
         }
         float angle = Mathf.LerpAngle(playerModel.localRotation.eulerAngles.y, cameraFollowTransform.rotation.eulerAngles.y, rotSpeed * Time.fixedDeltaTime);
         playerModel.localRotation = Quaternion.Euler(0, angle, 0); // rotate Player model
@@ -181,9 +186,9 @@ public class PlayerController : MonoBehaviour
     {
         // calculate movement direction
         moveDirection = cameraFollowTransform.forward * inputVertical + cameraFollowTransform.right * inputHorizontal; // Player Move Direction
+        moveDirection.y = 0f;
 
-        //rigid.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
-        rigid.MovePosition(rigid.position + moveDirection.normalized * moveSpeed * Time.fixedDeltaTime); // player Move position
+        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveDirection.normalized * moveSpeed); // player Move position
 
         playerModel.position = transform.position + moveDirection.normalized * Time.fixedDeltaTime;
     }
