@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IAlive
 {
     // Components
     PlayerInput playerAction; // WASD , Space , F(Use)
@@ -22,7 +23,6 @@ public class Player : MonoBehaviour
     /// RotateDirection (1 : right , -1 : left, 0 : stop)
     /// </summary>
     float rotateDirection = 0.0f;
-
 
     // Player Stats
     /// <summary>
@@ -56,6 +56,11 @@ public class Player : MonoBehaviour
     float jumpCoolRemain = -1.0f;
 
     /// <summary>
+    /// 플레이어의 생존 여부
+    /// </summary>
+    bool isAlive = true;
+
+    /// <summary>
     /// 점프가 가능한지 확인하는 프로퍼티(점프중이 아니고 쿨타임이 다 지났다.)
     /// </summary>
     bool IsJumpAvailable =>  !isJumping && (jumpCoolRemain < 0.0f);
@@ -64,6 +69,13 @@ public class Player : MonoBehaviour
     /// Animator Hash Values
     /// </summary>
     readonly int isMoveHash = Animator.StringToHash("isMove");
+    readonly int UseHash = Animator.StringToHash("Use");
+    readonly int DieHash = Animator.StringToHash("Die");
+
+    /// <summary>
+    /// 플레이어의 사망을 알리는 델리게이트
+    /// </summary>
+    public Action onDie;
 
     void Awake()
     {
@@ -71,6 +83,9 @@ public class Player : MonoBehaviour
         playerAction = new(); // 데이터 타입이 애매하면 안됨
         rigid = GetComponent<Rigidbody>(); 
         animator = GetComponent<Animator>();
+
+        ItemUseChecker checker = GetComponentInChildren<ItemUseChecker>();
+        checker.onItemUse += (IInteracable) => IInteracable.Use();
     }
 
     void OnEnable()
@@ -103,7 +118,7 @@ public class Player : MonoBehaviour
 
     private void OnUseInput(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
-        throw new NotImplementedException();
+        animator.SetTrigger(UseHash);
     }
 
     void Update()
@@ -176,5 +191,33 @@ public class Player : MonoBehaviour
             jumpCoolRemain = jumpCooltime; // 점프 쿨타임 초기화
             isJumping = true; // 점프 했다고 표시
         } 
+    }
+
+    /// <summary>
+    /// 사망처리용 함수
+    /// </summary>
+    public void Die()
+    {
+        if(isAlive)
+        {
+            Debug.Log("Player 죽었음");
+
+            animator.SetTrigger(DieHash);
+            playerAction.Disable();
+
+
+            Transform head = transform.GetChild(0); // Head Object
+            rigid.constraints = RigidbodyConstraints.None; // 물리 잠금을 전부 해제하기
+            rigid.AddForceAtPosition(-transform.forward, head.position, ForceMode.Impulse);
+            rigid.AddTorque(transform.up * 1.5f, ForceMode.Impulse);
+
+            onDie?.Invoke();
+
+            // 죽는 애니메이션이 나온다.
+            // 더 이상 조종이 안되어야한다.
+            // 대굴대굴 구른다. (뒤로 넘어가면서 y축으로 스핀을 먹는다.)
+            // 죽었다고 신호보내기 => 델리게이트
+            isAlive = false;
+        }
     }
 }

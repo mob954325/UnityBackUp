@@ -10,19 +10,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2602032695699905922, guid: 8492630efacb12e4b8bb9d09bc56dcfd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.3
+      value: -0.7
       objectReference: {fileID: 0}
     - target: {fileID: 4164077952515236771, guid: 8492630efacb12e4b8bb9d09bc56dcfd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 31.618296
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4164077952515236771, guid: 8492630efacb12e4b8bb9d09bc56dcfd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.802934
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4164077952515236771, guid: 8492630efacb12e4b8bb9d09bc56dcfd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.9920735
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4164077952515236771, guid: 8492630efacb12e4b8bb9d09bc56dcfd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5381999438115134120, guid: 8492630efacb12e4b8bb9d09bc56dcfd, type: 3}
       propertyPath: m_VersionIndex
-      value: 1171
+      value: 1174
       objectReference: {fileID: 0}
     - target: {fileID: 5382028493587989082, guid: 8492630efacb12e4b8bb9d09bc56dcfd, type: 3}
       propertyPath: m_Controller
@@ -63,6 +63,22 @@ PrefabInstance:
     - target: {fileID: 6708138666181546906, guid: 8492630efacb12e4b8bb9d09bc56dcfd, type: 3}
       propertyPath: m_Name
       value: Door_SlideAuto Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7033120844253651609, guid: 8492630efacb12e4b8bb9d09bc56dcfd, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 46f5318b75f6e904bb4d322af02ee366, type: 2}
+    - target: {fileID: 8499878708438786817, guid: 8492630efacb12e4b8bb9d09bc56dcfd, type: 3}
+      propertyPath: m_Size.z
+      value: 4.640094
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499878708438786817, guid: 8492630efacb12e4b8bb9d09bc56dcfd, type: 3}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8499878708438786817, guid: 8492630efacb12e4b8bb9d09bc56dcfd, type: 3}
+      propertyPath: m_Center.z
+      value: -0.35004622
       objectReference: {fileID: 0}
     - target: {fileID: 8499878708438786817, guid: 8492630efacb12e4b8bb9d09bc56dcfd, type: 3}
       propertyPath: m_IsTrigger
@@ -93,3 +109,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d82182ee160b271498aa59d3508745da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  key: {fileID: 0}

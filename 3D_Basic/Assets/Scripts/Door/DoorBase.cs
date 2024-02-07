@@ -7,6 +7,11 @@ using UnityEngine;
 /// </summary>
 public class DoorBase : MonoBehaviour
 {
+    /// <summary>
+    /// 이 문의 열쇠 (사용하지 않으면 null)
+    /// </summary>
+    public DoorKey key = null;
+
     Animator animator;
 
     readonly int IsOpenHash = Animator.StringToHash("isOpen");
@@ -14,6 +19,14 @@ public class DoorBase : MonoBehaviour
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
+    }
+
+    protected virtual void Start()
+    {
+        if(key != null)
+        {
+            key.onConsume += OnKeyUsed;
+        }
     }
 
     /// <summary>
@@ -32,12 +45,22 @@ public class DoorBase : MonoBehaviour
 
     }
 
+
+    /// <summary>
+    /// 연결된 열쇠가 소비될 때 실행할 일을 기록하는 함수
+    /// </summary>
+    protected virtual void OnKeyUsed()
+    {
+
+    }
+
     /// <summary>
     /// 문은 여는 함수
     /// </summary>
     public void Open()
     {
         animator.SetBool(IsOpenHash, true);
+        OnOpen();
     }
 
     /// <summary>
@@ -46,5 +69,6 @@ public class DoorBase : MonoBehaviour
     public void Close()
     {
         animator.SetBool(IsOpenHash, false);
+        OnClose();
     }
 }

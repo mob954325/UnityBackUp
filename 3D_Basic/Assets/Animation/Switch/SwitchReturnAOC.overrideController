@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SwitchReturnAOC
+  m_Controller: {fileID: 9100000, guid: a22f6e2e8a4f89a47b95e2a331d6c381, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: f22068622e6a41c488881405d5b6535e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 8c04a6b87aa56ab409afa4a625a576b7, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: deff7ebb4bb001c46b453ccab69c94a9, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d60a9d72fe81e1a45971a05e56398061, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 5caa48a0c96af9840960a8b085afbb67, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a5a92f07d5eb31141a1758069683ed2a, type: 2}

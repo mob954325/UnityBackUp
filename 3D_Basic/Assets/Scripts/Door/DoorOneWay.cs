@@ -4,32 +4,27 @@ using UnityEngine;
 
 public class DoorOneWay : DoorBase
 {
-    Transform doorTransform;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        Transform Hinge = transform.GetChild(1);
-
-        doorTransform = Hinge.GetChild(0);
-    }
-
     void OnTriggerEnter(Collider other)
     {
-        Vector3 dir = other.transform.position - doorTransform.position;
-        dir.y = 0.0f;
-
-        float angle = Vector3.SignedAngle(doorTransform.forward, dir, Vector3.forward);
-        Debug.Log($"Angle : {angle}");
-
-        if (angle <= 90f) // forward방향만 열림
+        if (other.CompareTag("Player"))
         {
-            Open();
+            // other는 플레이어
+            Vector3 playerToDoor = transform.position - other.transform.position; // 플레이어에서 문으로 향하는 방향벡터
+
+            float angle = Vector3.Angle(transform.forward, playerToDoor); // 각도
+
+            if(angle > 90.0f)
+            {
+                Open();
+            }
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        Close();
+        if (other.CompareTag("Player"))
+        {
+            Close();
+        }
     }
 }

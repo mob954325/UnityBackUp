@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TrapPushAOC
+  m_Controller: {fileID: 9100000, guid: 3f497c9b83d659a4d9e76a89cb3d7915, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: b14668142222e0f479cf7fed8d3b1020, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: b14668142222e0f479cf7fed8d3b1020, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 4232418013c424c4393f423dc95ccc28, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 2958ecd43d589e346bd349e0d5bf1b86, type: 2}
