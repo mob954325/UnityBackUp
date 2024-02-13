@@ -36,4 +36,48 @@ public class TrapSlow : TrapBase
     //    yield return new WaitForSeconds(2.5f);
     //    player.moveSpeed = preMoveSpeed;
     //}
+
+    /// <summary>
+    /// 밟았을 때 슬로우 지속시간
+    /// </summary>
+    public float slowDuration = 5.0f;
+
+    /// <summary>
+    /// 밟았을 때 느려지는 비율
+    /// </summary>
+    [Range(0.1f, 2.0f)]
+    public float slowRatio = 0.5f;
+    ParticleSystem ps;
+
+    void Awake()
+    {
+        Transform child = transform.GetChild(1);
+        ps = child.GetComponent<ParticleSystem>();
+    }
+
+    protected override void OnTrapActivate(GameObject target)
+    {
+        ps.Play();
+        Player player = target.GetComponent<Player>();
+        if (player != null)
+        {
+            player.SetSpeedModifier(slowRatio); // 대상이 플레이어면 속도 지정
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        Player player = other.GetComponent<Player>();
+        if (player != null)
+        {
+            StopAllCoroutines();
+            StartCoroutine(ResotoreSpeed(player)); // 트리거에서 나간 것이 플레이어이면 slowDuration후에 속도 복구
+        }
+    }
+
+    IEnumerator ResotoreSpeed(Player player)
+    {
+        yield return new WaitForSeconds(slowDuration);
+        player.RestoreMoveSpeed();
+    }
 }

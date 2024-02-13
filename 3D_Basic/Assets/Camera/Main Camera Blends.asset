@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CustomBlends:
   - m_From: VC_Player
-    m_To: '**ANY CAMERA**'
+    m_To: Dolly Camera
     m_Blend:
       m_Style: 1
-      m_Time: 2
+      m_Time: 0.5
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []

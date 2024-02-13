@@ -31,6 +31,11 @@ public class Player : MonoBehaviour, IAlive
     public float moveSpeed = 5.0f;
 
     /// <summary>
+    /// 현재 이동 속도
+    /// </summary>
+    float currentMoveSpeed = 5.0f;
+
+    /// <summary>
     /// Player Rotate Speed
     /// </summary>
     public float rotateSpeed = 180.0f;
@@ -41,9 +46,39 @@ public class Player : MonoBehaviour, IAlive
     public float jumpPower = 6.0f;
 
     /// <summary>
-    /// Check Player is jumping
+    /// Check Player is in air
     /// </summary>
-    bool isJumping = false;
+    bool InAir
+    {
+        get => GroundCount < 1;
+    }
+
+    /// <summary>
+    /// 접촉하고 있는 "Ground" 태그 오브젝트의 개수확인 및 설정용 프로퍼티
+    /// </summary>
+    int GroundCount
+    {
+        get => groundCount;
+        set
+        {
+            if (groundCount < 0)
+            {
+                groundCount = 0;
+            }
+
+            groundCount = value;
+
+            if(groundCount < 0)
+            {
+                groundCount = 0;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 접촉하고 있는 "Ground" 태그 오브젝트의 개수
+    /// </summary>
+    int groundCount = 0;
 
     /// <summary>
     /// Jump CoolDown
@@ -63,7 +98,7 @@ public class Player : MonoBehaviour, IAlive
     /// <summary>
     /// 점프가 가능한지 확인하는 프로퍼티(점프중이 아니고 쿨타임이 다 지났다.)
     /// </summary>
-    bool IsJumpAvailable =>  !isJumping && (jumpCoolRemain < 0.0f);
+    bool IsJumpAvailable =>  !InAir && (jumpCoolRemain < 0.0f);
 
     /// <summary>
     /// Animator Hash Values
@@ -77,6 +112,40 @@ public class Player : MonoBehaviour, IAlive
     /// </summary>
     public Action onDie;
 
+    /// <summary>
+    /// 시작했을 때의 플레이어 수명
+    /// </summary>
+    public float startLifeTime = 10.0f;
+
+    /// <summary>
+    /// 현재 플레이어 수명
+    /// </summary>
+    float lifeTime = 0.0f;
+
+    /// <summary>
+    /// 플레이어의 수명을 확인하고 설정하기 위한 프로퍼티
+    /// </summary>
+    float LifeTime
+    {
+        get => lifeTime;
+        set
+        {
+            // 코드 추가 필요
+            lifeTime = value;
+            if (lifeTime <= 0.0f)
+            {
+                lifeTime = 0.0f; // 수명이 다 되었으면 0.0으로 숫자 정리 및 사망처리
+                Die();
+            }
+            onLifeTimeChange?.Invoke(lifeTime / startLifeTime); // 현재 수명 비율을 알림
+        }
+    }
+
+    /// <summary>
+    /// 수명이 변경될 때 실행될 델리게이트
+    /// </summary>
+    public Action<float> onLifeTimeChange;
+
     void Awake()
     {
         //playerAction = new PlayerInput();
@@ -86,6 +155,12 @@ public class Player : MonoBehaviour, IAlive
 
         ItemUseChecker checker = GetComponentInChildren<ItemUseChecker>();
         checker.onItemUse += (IInteracable) => IInteracable.Use();
+    }
+
+    void Start()
+    {
+        currentMoveSpeed = moveSpeed;
+        LifeTime = startLifeTime;
     }
 
     void OnEnable()
@@ -124,26 +199,56 @@ public class Player : MonoBehaviour, IAlive
     void Update()
     {
         jumpCoolRemain -= Time.deltaTime;
-
-        if(jumpCoolRemain < 0)
-        {
-            //Debug.Log("Jump Ready");
-        }
+        LifeTime -= Time.deltaTime;
     }
 
     void FixedUpdate()
     {
         Move();
         Rotate();
-       // JumpTimer();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.CompareTag("Ground"))
         {
-            isJumping = false;
+            GroundCount++;
         }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            GroundCount--;
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        PlatformBase platform = other.GetComponent<PlatformBase>();
+        if(platform != null)
+        {
+            platform.onMove += OnRideMovingObject; // 플랫폼 트리거에 들어갔을 때 연결 
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        PlatformBase platform = other.GetComponent<PlatformBase>();
+        if (platform != null)
+        {
+            platform.onMove -= OnRideMovingObject; // 플랫폼 트리거에서 나왔을 때 연결 해제
+        }
+    }
+
+    /// <summary>
+    /// 움직이는 물체에 탑승했을 때 연결될 함수
+    /// </summary>
+    /// <param name="delta"></param>
+    void OnRideMovingObject(Vector3 delta)
+    {
+        rigid.MovePosition(rigid.position + delta);
     }
 
     /// <summary>
@@ -164,7 +269,7 @@ public class Player : MonoBehaviour, IAlive
     /// </summary>
     void Move()
     {
-        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * moveSpeed * moveDirection * transform.forward);
+        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * currentMoveSpeed * moveDirection * transform.forward);
     }
 
     void Rotate()
@@ -189,7 +294,7 @@ public class Player : MonoBehaviour, IAlive
         {
             rigid.AddForce(jumpPower * Vector3.up, ForceMode.Impulse); // 위쪽으로 jumpPower만큼 힘을 더하기
             jumpCoolRemain = jumpCooltime; // 점프 쿨타임 초기화
-            isJumping = true; // 점프 했다고 표시
+            //GroundCount = 0; // 모든 땅에서 떨어짐
         } 
     }
 
@@ -219,5 +324,22 @@ public class Player : MonoBehaviour, IAlive
             // 죽었다고 신호보내기 => 델리게이트
             isAlive = false;
         }
+    }
+
+    /// <summary>
+    /// 이독 속도 증감용 함수
+    /// </summary>
+    /// <param name="ratdio">증감 비율</param>
+    public void SetSpeedModifier(float ratdio = 1.0f)
+    {
+        currentMoveSpeed = moveSpeed * ratdio;
+    }
+
+    /// <summary>
+    /// 원래 기준속도로 복구하는 함수
+    /// </summary>
+    public void RestoreMoveSpeed()
+    {
+        currentMoveSpeed = moveSpeed;
     }
 }
