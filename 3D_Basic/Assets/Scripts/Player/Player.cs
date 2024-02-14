@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -90,6 +91,18 @@ public class Player : MonoBehaviour, IAlive
     /// </summary>
     float jumpCoolRemain = -1.0f;
 
+    private float JumpCoolRemain
+    {
+        get => jumpCoolRemain;
+        set
+        {
+            jumpCoolRemain = value;
+            onJumpCollTimeChange?.Invoke(JumpCoolRemain / jumpCooltime);
+        }
+    }
+
+    public Action<float> onJumpCollTimeChange;
+
     /// <summary>
     /// 플레이어의 생존 여부
     /// </summary>
@@ -98,7 +111,7 @@ public class Player : MonoBehaviour, IAlive
     /// <summary>
     /// 점프가 가능한지 확인하는 프로퍼티(점프중이 아니고 쿨타임이 다 지났다.)
     /// </summary>
-    bool IsJumpAvailable =>  !InAir && (jumpCoolRemain < 0.0f);
+    bool IsJumpAvailable => !InAir && (JumpCoolRemain < 0.0f) && isAlive;
 
     /// <summary>
     /// Animator Hash Values
@@ -130,7 +143,6 @@ public class Player : MonoBehaviour, IAlive
         get => lifeTime;
         set
         {
-            // 코드 추가 필요
             lifeTime = value;
             if (lifeTime <= 0.0f)
             {
@@ -161,6 +173,24 @@ public class Player : MonoBehaviour, IAlive
     {
         currentMoveSpeed = moveSpeed;
         LifeTime = startLifeTime;
+
+        GameManager.Instance.onGameClear += playerAction.Player.Disable;
+
+        // 가상 스틱 연결하기
+        VirtualStick stick = GameManager.Instance.Stick;
+        if(stick != null)
+        {
+            stick.OnMoveInput += (inputDelta) => SetInput(inputDelta, inputDelta.sqrMagnitude > 0.0025f);// 이동 입력전달
+            onDie += stick.Stop; // 플레이어 죽으면 정지
+        }
+
+        VirtualButton jump = GameManager.Instance.JumpButton;
+        if(jump != null)
+        {
+            jump.onClick += Jump; // 점프 입력 전달
+            onJumpCollTimeChange += jump.RefreshCoolTime; // 점프 쿨타임 전달
+            onDie += jump.Stop; // 플레이어 죽으면 정지
+        }
     }
 
     void OnEnable()
@@ -198,7 +228,7 @@ public class Player : MonoBehaviour, IAlive
 
     void Update()
     {
-        jumpCoolRemain -= Time.deltaTime;
+        JumpCoolRemain -= Time.deltaTime;
         LifeTime -= Time.deltaTime;
     }
 
@@ -293,9 +323,9 @@ public class Player : MonoBehaviour, IAlive
         if (IsJumpAvailable) // 점프가 가능할 때만 점프
         {
             rigid.AddForce(jumpPower * Vector3.up, ForceMode.Impulse); // 위쪽으로 jumpPower만큼 힘을 더하기
-            jumpCoolRemain = jumpCooltime; // 점프 쿨타임 초기화
+            JumpCoolRemain = jumpCooltime; // 점프 쿨타임 초기화
             //GroundCount = 0; // 모든 땅에서 떨어짐
-        } 
+        }
     }
 
     /// <summary>
@@ -310,7 +340,6 @@ public class Player : MonoBehaviour, IAlive
             animator.SetTrigger(DieHash);
             playerAction.Disable();
 
-
             Transform head = transform.GetChild(0); // Head Object
             rigid.constraints = RigidbodyConstraints.None; // 물리 잠금을 전부 해제하기
             rigid.AddForceAtPosition(-transform.forward, head.position, ForceMode.Impulse);
@@ -322,6 +351,8 @@ public class Player : MonoBehaviour, IAlive
             // 더 이상 조종이 안되어야한다.
             // 대굴대굴 구른다. (뒤로 넘어가면서 y축으로 스핀을 먹는다.)
             // 죽었다고 신호보내기 => 델리게이트
+
+            GameManager.Instance.GameOver();
             isAlive = false;
         }
     }
