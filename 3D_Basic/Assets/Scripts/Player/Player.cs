@@ -153,6 +153,8 @@ public class Player : MonoBehaviour, IAlive
         }
     }
 
+    bool isClear = false;
+
     /// <summary>
     /// 수명이 변경될 때 실행될 델리게이트
     /// </summary>
@@ -167,6 +169,7 @@ public class Player : MonoBehaviour, IAlive
 
         ItemUseChecker checker = GetComponentInChildren<ItemUseChecker>();
         checker.onItemUse += (IInteracable) => IInteracable.Use();
+        GameManager.Instance.onGameClear += GameClear;
     }
 
     void Start()
@@ -228,6 +231,9 @@ public class Player : MonoBehaviour, IAlive
 
     void Update()
     {
+        if (isClear)
+            return; 
+
         JumpCoolRemain -= Time.deltaTime;
         LifeTime -= Time.deltaTime;
     }
@@ -372,5 +378,10 @@ public class Player : MonoBehaviour, IAlive
     public void RestoreMoveSpeed()
     {
         currentMoveSpeed = moveSpeed;
+    }
+
+    void GameClear()
+    {
+        isClear = true;
     }
 }

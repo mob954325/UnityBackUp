@@ -66,9 +66,10 @@ public class GameManager : Singleton<GameManager>
     public Action onGameOver;
     public void GameOver()
     {
-        if (!isClear)
+        if (!isOver)
         {
             onGameOver?.Invoke();
+            isOver = true;
         }
     }
 }

@@ -575,6 +575,7 @@ MonoBehaviour:
   rotateSpeed: 180
   jumpPower: 6
   jumpCooltime: 1
+  startLifeTime: 111111
 --- !u!136 &92791799701926605
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -8,14 +8,22 @@ public class GameClearPanel : MonoBehaviour
 
     RectTransform rect;
 
+    //CanvasGroup canvasGroup;
+
     void Awake()
     {
         rect = GetComponent<RectTransform>();
+        //canvasGroup = GetComponent<CanvasGroup>();
     }
 
     void Start()
     {
         GameManager.Instance.onGameClear += ShowGameClearPanel;
+       //GameManager.Instance.onGameClear += () =>
+       //{
+       //    canvasGroup.alpha = 1; // 알파값 올려서 보이게 만들기
+       //    canvasGroup.blocksRaycasts = true; // 레이케스트를 자기가 되게 하기
+       //};
         InitPosition();
     }
 

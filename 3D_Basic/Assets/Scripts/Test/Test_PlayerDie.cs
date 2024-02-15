@@ -10,4 +10,9 @@ public class Test_PlayerDie : TestBase
     {
         GameManager.Instance.Player.Die();
     }
+
+    protected override void OnTest2(InputAction.CallbackContext context)
+    {
+        GameManager.Instance.onGameClear?.Invoke();
+    }
 }
