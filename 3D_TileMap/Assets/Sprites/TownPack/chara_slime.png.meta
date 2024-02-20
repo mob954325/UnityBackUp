@@ -43,12 +43,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -121,7 +121,70 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Slime_Idle_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 480
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec44e3033cb0edd4bb422a6abded7d43
+      internalID: -552104615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Idle_1
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 480
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc3efe2a0bd7951479abe40bcba86f12
+      internalID: 1466595240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Idle_2
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 480
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41900a3f77b978e47b1714b78d6519be
+      internalID: -1216292424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -132,7 +195,50 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Slime_Idle_0: -552104615
+      Slime_Idle_1: 1466595240
+      Slime_Idle_2: -1216292424
+      chara_slime_10: 270161420
+      chara_slime_11: -1202639262
+      chara_slime_12: 1211103495
+      chara_slime_13: -957300916
+      chara_slime_14: 1057455423
+      chara_slime_15: -2001879185
+      chara_slime_16: -306032421
+      chara_slime_17: 2072804642
+      chara_slime_18: 676498943
+      chara_slime_19: -1238461563
+      chara_slime_20: 869800327
+      chara_slime_21: 2076876867
+      chara_slime_22: -1819283382
+      chara_slime_23: 1355233316
+      chara_slime_24: 2084157197
+      chara_slime_25: 383669284
+      chara_slime_26: -612104028
+      chara_slime_27: 36879547
+      chara_slime_28: 1838802234
+      chara_slime_29: 1462363206
+      chara_slime_3: 1952842274
+      chara_slime_30: -491427879
+      chara_slime_31: -1126651461
+      chara_slime_32: 2069524007
+      chara_slime_33: 81533358
+      chara_slime_34: 271235735
+      chara_slime_35: -1645784550
+      chara_slime_36: -1166301665
+      chara_slime_37: -1586981287
+      chara_slime_38: -1185278431
+      chara_slime_39: 1835885852
+      chara_slime_4: 702122971
+      chara_slime_40: -772902429
+      chara_slime_41: 1814741550
+      chara_slime_42: -345356668
+      chara_slime_5: -1373244366
+      chara_slime_6: -1984791669
+      chara_slime_7: -1456484832
+      chara_slime_8: 697908343
+      chara_slime_9: -646918479
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
