@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - AttackSensor
   layers:
   - Default
   - TransparentFX
@@ -52,6 +53,9 @@ TagManager:
     locked: 0
   - name: Object
     uniqueID: 682523943
+    locked: 0
+  - name: Slime
+    uniqueID: 253125733
     locked: 0
   - name: Player
     uniqueID: 409815175
