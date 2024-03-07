@@ -3,70 +3,122 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public static class Astar
+public static class AStar
 {
     const float sideDistance = 1.0f;
-    const float diagonalDistance = 1.0f;
+    const float diagonalDistance = 1.4f;
 
     /// <summary>
-    /// ¸ÊÀÇ ½ÃÀÛÁ¡°ú µµÂøÁ¡À» ¹Ş¾Æ °æ·Î¸¦ °è»êÇÏ´Â ÇÔ¼ö 
+    /// ë§µê³¼ ì‹œì‘ì ê³¼ ë„ì°©ì ì„ ë°›ì•„ ê²½ë¡œë¥¼ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
-    /// <param name="map">±æÀ» Ã£À» ¸Ê </param>
-    /// <param name="start">½ÃÀÛÁ¡ </param>
-    /// <param name="end">µµÂøÁ¡ </param>
-    /// <returns>½ÃÀÛÁ¡¿¡¼­ µµÂøÁ¡±îÁöÀÇ °æ·Î, ±æÀ» ¸øÃ£À¸¸é null</returns>
-    public static List<Vector2Int> PathFine(GridMap map, Vector2Int start, Vector2Int end)
+    /// <param name="map">ê¸¸ì„ ì°¾ì„ ë§µ</param>
+    /// <param name="start">ì‹œì‘ì </param>
+    /// <param name="end">ë„ì°©ì </param>
+    /// <returns>ì‹œì‘ì ì—ì„œ ë„ì°©ì ê¹Œì§€ì˜ ê²½ë¡œ, ê¸¸ì„ ëª»ì°¾ìœ¼ë©´ null</returns>
+    public static List<Vector2Int> PathFind(GridMap map, Vector2Int start, Vector2Int end)
     {
         List<Vector2Int> path = null;
 
-
-        if (map.IsValidPosition(start) && map.IsValidPosition(end)
-            && map.IsWall(start) && map.IsWall(end)) //  º®ÀÎÁö ¾Æ´ÑÁö È®ÀÎÇÏ¸é ¸Ê ¾ÈÀÎÁö ¾Æ´ÑÁöµµ È®ÀÎ°¡´É
+        if(map.IsValidPosition(start) && map.IsValidPosition(end) && !map.IsWall(start) && !map.IsWall(end))
         {
-            // start¿Í end°¡ ¸Ê ¾ÈÀÌ°í º®ÀÌ ¾Æ´Ï´Ù.
+            // startì™€ endê°€ ë§µ ì•ˆì´ê³  í‰ì§€ë‹¤.
 
-            map.ClearMapData();
+            map.ClearMapData(); // ë§µ ë°ì´í„° ì „ì²´ ì´ˆê¸°í™”
 
-            // Opnlist, closelist Ãß°¡
-            //1.½ÃÀÛÁ¡À» open list¿¡ Ãß°¡ÇÑ´Ù
-            List<Node> open = new List<Node>(); // open list : ¾ÕÀ¸·Î Å½»öÇÒ ³ëµåÀÇ ¸®½ºÆ®
-            List<Node> close = new List<Node>(); // close list : Åº»öÀÌ ¿Ï·áµÈ ³ëµåÀÇ ¸®½ºÆ®
+            List<Node> open = new List<Node>();     // open list : ì•ìœ¼ë¡œ íƒìƒ‰í•  ë…¸ë“œì˜ ë¦¬ìŠ¤íŠ¸
+            List<Node> close = new List<Node>();    // close list : íƒìƒ‰ì´ ì™„ë£Œëœ ë…¸ë“œì˜ ë¦¬ìŠ¤íŠ¸
 
-            // a* ¾Ë°í¸®Áò ½ÃÀÛÇÏ±â
+            // A* ì•Œê³ ë¦¬ì¦˜ ì‹œì‘í•˜ê¸°
             Node current = map.GetNode(start);
             current.G = 0.0f;
             current.H = GetHeuristic(current, end);
             open.Add(current);
 
-            // A* ·çÇÁ ½ÃÀÛ(ÇÙ¹Ì ·çÆ¾)
-            while(open.Count > 0)
+            // A* ë£¨í”„ ì‹œì‘(í•µì‹¬ ë£¨í‹´)
+            while(open.Count > 0)   // open ë¦¬ìŠ¤íŠ¸ì— ë…¸ë“œê°€ ìˆìœ¼ë©´ ê³„ì† ë°˜ë³µ
             {
-                //2.open list¿¡ Ãß°¡°¡ µÉ ¶§´Â f¸¦ °è»êÇÑ´Ù(g¿Í hµµ °è»êÀÌ µÇ¾î¾ßÇÔ)
-                //3.open list f °ªÀÌ °¡Àå ÀÛÀº ³ëµåÀ» ÇÏ³ª ¼±ÅÃÇÑ´Ù
-                //4.¼±ÅÃµÈ ³ëµåÀÇ ÁÖº¯ ³ëµå¸¦ openlist¿¡ Ãß°¡ÇÑ´Ù(¸ø°¡´Â ³ëµå¿Í closelist¿¡ ÀÖ´Â ³ëµå´Â ÇÏÁö ¾ÊÀ½, g°ªÀÌ ÀÌÀüº¸´Ù ´õ ÀÛÀº °æ¿ì´Â °»½ÅÇÑ´Ù.)
-                //5.¼±ÅÃÇÑ ³ëµå´Â close list¿¡ µé¾î°£´Ù.
-                //6.¼±ÅÃµÈ ³ëµå°¡ µµÂøÁ¡ÀÌ ¾Æ´Ï¸é 3¹øÀ¸·Î µ¹¾Æ°¡ ´Ù½Ã ½ÇÇàÇÑ´Ù
+                open.Sort();            // fê°’ì„ ê¸°ì¤€ìœ¼ë¡œ ì •ë ¬
+                current = open[0];      // ì œì¼ ì•ì— ìˆëŠ” ë…¸ë“œ(=fê°’ì´ ê°€ì¥ ì‘ì€ ë…¸ë“œ)ë¥¼ currentë¡œ ì„¤ì •
+                open.RemoveAt(0);       // openë¦¬ìŠ¤íŠ¸ì—ì„œ ì œì¼ ì•ì— ìˆëŠ” ë…¸ë“œë¥¼ ì œê±°
+
+                if( current != end )
+                {
+                    // ëª©ì ì§€ê°€ ì•„ë‹ˆë‹¤.
+                    close.Add(current); // closeë¦¬ìŠ¤íŠ¸ì— currentë¥¼ ì¶”ê°€í•´ì„œ íƒìƒ‰ì´ ì™„ë£Œë˜ì—ˆìŒì„ í‘œì‹œ
+
+                    // currentì˜ ì£¼ë³€ 8ë°©í–¥ì„ open ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
+                    for(int y = -1;y<2;y++)
+                    {
+                        for(int x = -1;x<2;x++)
+                        {
+                            Node node = map.GetNode(current.X + x, current.Y + y);  // ì£¼ë³€ ë…¸ë“œ ê°€ì ¸ì˜¤ê¸°
+
+                            // ìŠ¤í‚µí•  ë…¸ë“œì¸ì§€ í™•ì¸
+                            if (node == null) continue;                             // ë§µ ë°–
+                            if (node == current) continue;                          // ìê¸°ìì‹ 
+                            if (node.nodeType == Node.NodeType.Wall) continue;      // ë²½
+                            if (close.Exists((x) => x == node)) continue;           // close ë¦¬ìŠ¤íŠ¸ì— ìˆìŒ
+                                                                                    // (closeì— ìˆëŠ” ëª¨ë“  ìš”ì†Œ(x)ë¥¼ nodeì™€ ë¹„êµí•´ì„œ í•˜ë‚˜ë¼ë„ ê°™ìœ¼ë©´ true, ì „ë¶€ ë‹¤ë¥´ë©´ false)
+                            // ëŒ€ê°ì„ ìœ¼ë¡œ ê°€ëŠ”ë° ì˜†ì— ë²½ì´ ìˆëŠ” ê²½ìš°
+                            bool isDiagonal = (x * y) != 0;     // ëŒ€ê°ì„ ì¸ì§€ í™•ì¸(trueë©´ ëŒ€ê°ì„ )                            
+                            if ( isDiagonal &&
+                                (map.IsWall(current.X + x, current.Y) || map.IsWall(current.X , current.Y + y)) ) 
+                                continue; // ëŒ€ê°ì„ ì´ê³  í•œìª½ì´ ë²½ì´ë‹¤.
+
+                            // currentì—ì„œ (x, y)ë¡œ ê°€ëŠ”ë° ê±¸ë¦¬ëŠ” ê±°ë¦¬ë¥¼ í™•ì •(ëŒ€ê°ì„ ì€ 1.4, ì˜†ì€ 1.0)
+                            float distance = isDiagonal ? diagonalDistance : sideDistance;
+
+                            // Gê°’ì„ ê°±ì‹ í• ì§€ ê²°ì •
+                            if( node.G > current.G + distance )
+                            {
+                                // ì›ë˜ ê°€ì§€ë˜ ê²½ë¡œë³´ë‹¤ currentë¥¼ ê±°ì³ì„œ ì´ë™í•˜ëŠ” ê²ƒì´ ë” ë¹ ë¥´ë‹¤.(=ê°±ì‹  í•„ìš”)
+
+                                if( node.parent == null )   
+                                {
+                                    // ë¶€ëª¨ê°€ ì—†ìœ¼ë©´ ì•„ì§ openë¦¬ìŠ¤íŠ¸ì— ì•ˆë“¤ì–´ ê°”ìŒ
+                                    node.H = GetHeuristic(node, end);   // íœ´ë¦¬ìŠ¤í‹± ê³„ì‚°
+                                    open.Add(node);                     // openë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
+                                }
+
+                                node.G = current.G + distance;          // Gê°’ ì„¤ì •
+                                node.parent = current;                  // ë¶€ëª¨ ì„¤ì •
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // ëª©ì ì§€ì— ë„ì°©í–ˆë‹¤.
+                    break;  // ëª©ì ì§€ì— ë„ì°©í–ˆìœ¼ë©´ while ì¢…ë£Œ
+                }
             }
 
-            // ¸¶¹«¸® ÀÛ¾÷ (µµÂøÁ¡¿¡ µµÂøÇß´Ù. or ±æÀ» ¸øÃ£¾Ò´Ù.)
+            // ë§ˆë¬´ë¦¬ ì‘ì—…(ë„ì°©ì ì— ë„ì°©í–ˆë‹¤ or ê¸¸ì„ ëª»ì°¾ì•˜ë‹¤)
             if(current == end)
             {
-                // °æ·Î ¸¸µé±â
+                // ë„ì°©ì ì— ë„ì°©í–ˆë‹¤. => ê²½ë¡œ ë§Œë“¤ê¸°
+                path = new List<Vector2Int>();
+                Node result = current;
+                while(result != null)   // resultê°€ startê°€ ë  ë•Œê¹Œì§€ ë°˜ë³µ
+                {
+                    path.Add(new Vector2Int(result.X, result.Y));   // ê° currentì˜ ìœ„ì¹˜ë¥¼ ì¶”ê°€                    
+                    result = result.parent;
+                }
+                path.Reverse(); // ë„ì°©ì ->ì‹œì‘ì ìœ¼ë¡œ ë˜ì–´ ìˆëŠ” ê²½ë¡œë¥¼ ë’¤ì§‘ê¸°
             }
-
         }
 
         return path;
     }
 
     /// <summary>
-    /// ÈŞ¸®½ºÆ½ ÇÔ¼ö ( ÇöÀç À§Ä¡¿¡¼­ ¸ñÀûÁö±îÁö ¿¹»ó°Å¸®)
+    /// íœ´ë¦¬ìŠ¤í‹± ê°’ì„ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜(í˜„ì¬ ìœ„ì¹˜ì—ì„œ ëª©ì ì§€ê¹Œì§€ì˜ ì˜ˆìƒ ê±°ë¦¬)
     /// </summary>
-    /// <param name="Current">ÇöÀç³ëµå </param>
-    /// <param name="end">µµÂøÁöÁ¡ </param>
-    /// <returns>¿¹»ó°Å¸® </returns>
-    private static float GetHeuristic(Node Current, Vector2Int end)
+    /// <param name="current">í˜„ì¬ ë…¸ë“œ</param>
+    /// <param name="end">ë„ì°©ì§€ì </param>
+    /// <returns>ì˜ˆìƒ ê±°ë¦¬</returns>
+    private static float GetHeuristic(Node current, Vector2Int end)
     {
-        return Mathf.Abs(Current.X - end.x) + Mathf.Abs(Current.Y - end.y);
+        return Mathf.Abs(current.X - end.x) + Mathf.Abs(current.Y - end.y);
     }
 }

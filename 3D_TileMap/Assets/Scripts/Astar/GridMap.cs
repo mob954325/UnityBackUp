@@ -3,49 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ¸Ê Å¬·¡½º
+/// ë§µ í´ë˜ìŠ¤
 /// </summary>
-public class GridMap : MonoBehaviour
+public class GridMap
 {
     /// <summary>
-    /// ÀÌ ¸Ê¿¡ ÀÖ´Â ¸ğµç ³ëµåµé
+    /// ì´ ë§µì— ìˆëŠ” ëª¨ë“  ë…¸ë“œ
     /// </summary>
-    Node[] nodes;
+    protected Node[] nodes;
 
     /// <summary>
-    /// ¸ÊÀÇ °¡·Î ±æÀÌ
+    /// ë§µì˜ ê°€ë¡œ ê¸¸ì´
     /// </summary>
-    int width;
+    protected int width;
 
     /// <summary>
-    /// ¸ÊÀÇ ¼¼·Î ±æÀÌ
+    /// ë§µì˜ ì„¸ë¡œ ê¸¸ì´
     /// </summary>
-    int height;
+    protected int height;
 
+    protected GridMap() { }
+    
     /// <summary>
-    /// »ı¼ºÀÚ
+    /// ìƒì„±ì
     /// </summary>
-    /// <param name="width">°¡·Î±æÀÌ</param>
-    /// <param name="height">¼¼·Î±æÀÌ</param>
+    /// <param name="width">ê°€ë¡œê¸¸ì´</param>
+    /// <param name="height">ì„¸ë¡œê¸¸ì´</param>
     public GridMap(int width, int height)
     {
         this.width = width;
         this.height = height;
 
-        nodes = new Node[width * height]; // ³ëµå ¹è¿­ »ı¼º
+        nodes = new Node[width * height];   // ë…¸ë“œ ë°°ì—´ ìƒì„±
 
-        for(int y = 0; y < height; y++)
+        for(int y=0;y<height; y++)
         {
-            for (int x = 0; x < width; x++)
+            for(int x=0;x<width;x++)
             {
-                if (GridToIndex(x, y, out int? index))
-                    nodes[index.Value] = new Node(x, y); // ³ëµå »ı¼º
+                if(GridToIndex(x, y, out int? index))
+                    nodes[index.Value] = new Node(x, y);    // ë…¸ë“œ ìƒì„±
             }
         }
     }
 
     /// <summary>
-    /// ¸ğµç ³ëµåÀÇ a* °è»ê¿ë µ¥ÀÌÅÍ ÃÊ±âÈ­
+    /// ëª¨ë“  ë…¸ë“œì˜ A* ê³„ì‚°ìš© ë°ì´í„° ì´ˆê¸°í™”
     /// </summary>
     public void ClearMapData()
     {
@@ -53,19 +55,18 @@ public class GridMap : MonoBehaviour
         {
             node.ClearData();
         }
-
     }
 
     /// <summary>
-    /// Æ¯Á¤ À§Ä¡¿¡ ÀÖ´Â ³ëµå ¸®ÅÏÇÏ´Â ÇÔ¼ö
+    /// íŠ¹ì • ìœ„ì¹˜ì— ìˆëŠ” ë…¸ë“œë¥¼ ë¦¬í„´í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
-    /// <param name="x">¸Ê¿¡¼­ÀÇ x°ª</param>
-    /// <param name="y">¸Ê¿¡¼­ÀÇ y°ª</param>
-    /// <returns></returns>
+    /// <param name="x">ë§µì—ì„œì˜ xì¢Œí‘œ</param>
+    /// <param name="y">ë§µì—ì„œì˜ yì¢Œí‘œ</param>
+    /// <returns>ì°¾ì€ ë…¸ë“œ</returns>
     public Node GetNode(int x, int y)
     {
         Node node = null;
-        if( GridToIndex(x,y,out int? index) )
+        if( GridToIndex(x, y, out int? index) )
         {
             node = nodes[index.Value];
         }
@@ -73,90 +74,139 @@ public class GridMap : MonoBehaviour
     }
 
     /// <summary>
-    /// Æ¯Á¤ À§Ä¡¿¡ ÀÖ´Â ³ëµå ¸®ÅÏÇÏ´Â ÇÔ¼ö
+    /// íŠ¹ì • ìœ„ì¹˜ì— ìˆëŠ” ë…¸ë“œë¥¼ ë¦¬í„´í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
-    /// <param name="grid"></param>
-    /// <returns></returns>
-    public Node GetNode(Vector2Int grid)
+    /// <param name="gridPosition">ë§µì—ì„œì˜ ê·¸ë¦¬ë“œ ì¢Œí‘œ</param>
+    /// <returns>ì°¾ì€ ë…¸ë“œ</returns>
+    public Node GetNode(Vector2Int gridPosition)
     {
-        return GetNode(grid.x, grid.y);
+        return GetNode(gridPosition.x, gridPosition.y);
     }
 
     /// <summary>
-    /// Æ¯Á¤ À§Ä¡°¡ º®ÀÎÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    /// íŠ¹ì • ìœ„ì¹˜ê°€ í‰ì§€ì¸ì§€ ì•„ë‹Œì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
-    /// <param name="x"><¸Ê¿¡¼­ÀÇ xÁÂÇ¥/param>
-    /// <param name="y">¸Ê¿¡¼­ÀÇ yÁÂÇ¥</param>
-    /// <returns></returns>
+    /// <param name="x">ë§µì—ì„œì˜ xì¢Œí‘œ</param>
+    /// <param name="y">ë§µì—ì„œì˜ yì¢Œí‘œ</param>
+    /// <returns>trueë©´ í‰ì§€, falseë©´ í‰ì§€ ì•„ë‹˜</returns>
+    public bool IsPlain(int x, int y)
+    {
+        Node node = GetNode(x, y);
+        return node != null && node.nodeType == Node.NodeType.Plain;
+    }
+
+    /// <summary>
+    /// íŠ¹ì • ìœ„ì¹˜ê°€ í‰ì§€ì¸ì§€ ì•„ë‹Œì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
+    /// </summary>
+    /// <param name="gridPosition">ë§µì—ì„œì˜ ê·¸ë¦¬ë“œ ì¢Œí‘œ</param>
+    /// <returns>trueë©´ í‰ì§€, falseë©´ í‰ì§€ ì•„ë‹˜</returns>
+    public bool IsPlain(Vector2Int gridPosition)
+    {
+        return IsPlain(gridPosition.x, gridPosition.y);
+    }
+
+    /// <summary>
+    /// íŠ¹ì • ìœ„ì¹˜ê°€ ë²½ì¸ì§€ ì•„ë‹Œì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
+    /// </summary>
+    /// <param name="x">ë§µì—ì„œì˜ xì¢Œí‘œ</param>
+    /// <param name="y">ë§µì—ì„œì˜ yì¢Œí‘œ</param>
+    /// <returns>trueë©´ ë²½, falseë©´ ë²½ ì•„ë‹˜</returns>
     public bool IsWall(int x, int y)
     {
         Node node = GetNode(x, y);
-        return IsWall(x, y);
-    }
-
-    public bool IsWall(Vector2Int gridPosition)
-    {
-        return IsWall(gridPosition.x, gridPosition.y);
-    }
-
-    public bool IsSlime(int x, int y)
-    {
-        Node node = GetNode(x, y);
-        return IsSlime(x, y);   
-    }
-
-    public bool IsSlime(Vector2Int gridPosition)
-    {
-        return IsSlime(gridPosition.x, gridPosition.y);
+        return node != null && node.nodeType == Node.NodeType.Wall;
     }
 
     /// <summary>
-    /// ±×¸®µå ÁÂÇ¥¸¦ ÀÎµ¦½º°ªÀ¸·Î º¯°æÇØÁÖ´Â ÇÔ¼ö
+    /// íŠ¹ì • ìœ„ì¹˜ê°€ ë²½ì¸ì§€ ì•„ë‹Œì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
-    /// <param name="x">¸Ê¿¡¼­ÀÇ xÁÂÇ¥</param>
-    /// <param name="y">¸Ê¿¡¼­ÀÇ yÁÂÇ¥</param>
-    /// <param name="index">(Ãâ·Â¿ë) º¯°æµÈ ÀÎµ¦½º</param>
-    /// <returns>ÁÂÇ¥°¡ ÀûÀıÇÏ¸é true, ¸Ê ¹ÛÀÌ¸é false/returns>
-    bool GridToIndex(int x, int y, out int? index)
+    /// <param name="gridPosition">ë§µì—ì„œì˜ ê·¸ë¦¬ë“œ ì¢Œí‘œ</param>
+    /// <returns>trueë©´ ë²½, falseë©´ ë²½ ì•„ë‹˜</returns>
+    public bool IsWall(Vector2Int gridPosition)
+    {
+        return IsWall(gridPosition.x,gridPosition.y);
+    }
+
+    /// <summary>
+    /// íŠ¹ì • ìœ„ì¹˜ê°€ ìŠ¬ë¼ì„ì¸ì§€ ì•„ë‹Œì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
+    /// </summary>
+    /// <param name="x">ë§µì—ì„œì˜ xì¢Œí‘œ</param>
+    /// <param name="y">ë§µì—ì„œì˜ yì¢Œí‘œ</param>
+    /// <returns>trueë©´ ìŠ¬ë¼ì„, falseë©´ ìŠ¬ë¼ì„ ì•„ë‹˜</returns>
+    public bool IsSlime(int x, int y)
+    {
+        Node node = GetNode(x, y);
+        return node != null && node.nodeType == Node.NodeType.Slime;
+    }
+
+    /// <summary>
+    /// íŠ¹ì • ìœ„ì¹˜ê°€ ìŠ¬ë¼ì„ì¸ì§€ ì•„ë‹Œì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
+    /// </summary>
+    /// <param name="gridPosition">ë§µì—ì„œì˜ ê·¸ë¦¬ë“œ ì¢Œí‘œ</param>
+    /// <returns>trueë©´ ìŠ¬ë¼ì„, falseë©´ ìŠ¬ë¼ì„ ì•„ë‹˜</returns>
+    public bool IsSlime(Vector2Int gridPosition)
+    {
+        return IsSlime(gridPosition.x,gridPosition.y);
+    }
+
+    /// <summary>
+    /// ê·¸ë¦¬ë“œ ì¢Œí‘œë¥¼ ì¸ë±ìŠ¤ ê°’ìœ¼ë¡œ ë³€ê²½í•´ì£¼ëŠ” í•¨ìˆ˜
+    /// </summary>
+    /// <param name="x">ë§µì—ì„œì˜ xì¢Œí‘œ</param>
+    /// <param name="y">ë§µì—ì„œì˜ yì¢Œí‘œ</param>
+    /// <param name="index">(ì¶œë ¥ìš©)ë³€ê²½ëœ ì¸ë±ìŠ¤</param>
+    /// <returns>ì¢Œí‘œê°€ ì ì ˆí•˜ë©´ true, ë§µ ë°–ì´ë©´ false</returns>
+    protected bool GridToIndex(int x, int y, out int? index)
     {
         bool result = false;
         index = null;
 
-        if(IsValidPosition(x,y))
+        if (IsValidPosition(x,y))
         {
-            index = x + y * width;
-            return true;
+            index = CalcIndex(x,y);
+            result = true;
         }
 
         return result;
     }
 
     /// <summary>
-    /// ÀÎµ¦½º °ªÀ» ±×¸®µå ÁÂÇ¥·Î º¯°æÇÏ´Â ÇÔ¼ö
+    /// ì¸ë±ìŠ¤ ê³„ì‚°ì‹
     /// </summary>
-    /// <param name="index">º¯°æÇÒ index°ª</param>
-    /// <returns>º¯°æµÈ ±×¸®µå ÁÂÇ¥</returns>
-    Vector2Int IndexToGrid(int index)
+    /// <param name="x">x ì¢Œí‘œ</param>
+    /// <param name="y">y ì¢Œí‘œ</param>
+    /// <returns>ê³„ì‚°ëœ ì¸ë±ìŠ¤ ë°˜í™˜ ê°’</returns>
+    protected virtual int CalcIndex(int x, int y)
+    {
+        return x + y * width;
+    }
+
+    /// <summary>
+    /// ì¸ë±ìŠ¤ ê°’ì„ ê·¸ë¦¬ë“œ ì¢Œí‘œë¡œ ë³€ê²½í•´ì£¼ëŠ” í•¨ìˆ˜
+    /// </summary>
+    /// <param name="index">ë³€ê²½í•  indexê°’</param>
+    /// <returns>ë³€ê²½ëœ ê·¸ë¦¬ë“œ ì¢Œí‘œ</returns>
+    public Vector2Int IndexToGrid(int index)
     {
         return new Vector2Int(index % width, index / width);
     }
 
     /// <summary>
-    /// Æ¯Á¤ À§Ä¡°¡ ¸Ê ¾ÈÀÎÁö ¾Æ´ÑÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    /// íŠ¹ì • ìœ„ì¹˜ê°€ ë§µ ì•ˆì¸ì§€ ì•„ë‹Œì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
-    /// <param name="x">È®ÀÎÇÒ ÁÂÇ¥ x</param>
-    /// <param name="y">È®ÀÎÇÒ ÁÂÇ¥ y</param>
-    /// <returns>true¸é ¸Ê¾È, false¸é ¸Ê ¹Û</returns>
-    public bool IsValidPosition(int x, int y)
+    /// <param name="x">í™•ì¸í•  xì¢Œí‘œ</param>
+    /// <param name="y">í™•ì¸í•  yì¢Œí‘œ</param>
+    /// <returns>trueë©´ ë§µ ì•ˆ, falseë©´ ë§µ ë°–</returns>
+    public virtual bool IsValidPosition(int x, int y)
     {
         return x < width && y < height && x >= 0 && y >= 0;
     }
 
     /// <summary>
-    /// Æ¯Á¤ À§Ä¡°¡ ¸Ê ¾ÈÀÎÁö ¾Æ´ÑÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+    /// íŠ¹ì • ìœ„ì¹˜ê°€ ë§µ ì•ˆì¸ì§€ ì•„ë‹Œì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
-    /// <param name="gridPosition">È®ÀÎÇÒ ±×¸®µå ÁÂÇ¥</param>
-    /// <returns>true ¸Ê¾È, false ¸Ê ¹Û</returns>
+    /// <param name="gridPosition">í™•ì¸í•  ê·¸ë¦¬ë“œ ì¢Œí‘œ</param>
+    /// <returns>trueë©´ ë§µ ì•ˆ, falseë©´ ë§µ ë°–</returns>
     public bool IsValidPosition(Vector2Int gridPosition)
     {
         return IsValidPosition(gridPosition.x, gridPosition.y);

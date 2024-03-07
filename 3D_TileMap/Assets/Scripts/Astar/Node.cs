@@ -6,132 +6,135 @@ using UnityEngine;
 public class Node : IComparable<Node>
 {
     /// <summary>
-    /// ±×¸®µå ¸Ê¿¡¼­ÀÇ xÁÂÇ¥
+    /// ê·¸ë¦¬ë“œ ë§µì—ì„œì˜ xì¢Œí‘œ
     /// </summary>
     private int x;
     public int X => x;
+
     /// <summary>
-    /// ±×¸®µå ¸Ê¿¡¼­ÀÇ yÁÂÇ¥
+    /// ê·¸ë¦¬ë“œ ë§µì—ì„œì˜ yì¢Œí‘œ
     /// </summary>
     private int y;
     public int Y => y;
 
     /// <summary>
-    /// A* ¾Ë°í¸®ÁòÀÇ G°ª ( Ãâ¹ßÁ¡¿¡¼­ ÀÌ ³ëµå±îÁöÀÇ °É¸° ½ÇÁ¦ °Å¸® )
+    /// A* ì•Œê³ ë¦¬ì¦˜ì˜ Gê°’(ì¶œë°œì ì—ì„œ ì´ ë…¸ë“œê¹Œì§€ ì˜¤ëŠ”ë° ê±¸ë¦° ì‹¤ì œ ê±°ë¦¬)
     /// </summary>
     public float G;
 
     /// <summary>
-    /// A* ¾Ë°í¸®ÁòÀÇ H°ª ( ÀÌ ³ëµå¿¡¼­ µµÂøÁ¡±îÁöÀÇ ¿¹»ó °Å¸® )
+    /// A* ì•Œê³ ë¦¬ì¦˜ì˜ Hê°’(ì´ ë…¸ë“œì—ì„œ ë„ì°©ì ê¹Œì§€ì˜ ì˜ˆìƒ ê±°ë¦¬)
     /// </summary>
     public float H;
-    
-    /// <summary>
-    /// G + HÀÇ ÇÕ ( Ãâ¹ßÁ¡¿¡¼­ ÀÌ ³ëµå¸¦ °æÀ¯ÇØ¼­ µµÂøÁ¡±îÁö ÀÌµ¿ ÇÒ ¶§ ¿¹»ó °Å¸® )
-    /// </summary>
-    public float F => G = H;
 
     /// <summary>
-    /// ³ëµå°¡ °¡Áú ¼ö ÀÖ´Â Á¾·ù
+    /// Gì™€ Hì˜ í•©(ì¶œë°œì ì—ì„œ ì´ ë…¸ë“œë¥¼ ê²½ìœ í•´ì„œ ë„ì°©ì ê¹Œì§€ ì´ë™í•  ë•Œ ì˜ˆìƒë˜ëŠ” ê±°ë¦¬)
+    /// </summary>
+    public float F => G + H;
+
+    /// <summary>
+    /// ë…¸ë“œê°€ ê°€ì§ˆ ìˆ˜ ìˆëŠ” ì¢…ë¥˜ë“¤
     /// </summary>
     public enum NodeType
     {
-        Plain,  // ÆòÁö   (Áö³ª°¥ ¼ö ÀÖÀ½)
-        Wall,   // º®     (Áö³ª°¥ ¼ö ¾øÀ½)
-        Slime   // ½½¶óÀÓ  (Áö³ª°¥ ¼ö ¾øÀ½)
+        Plain,  // í‰ì§€(ì§€ë‚˜ê°ˆ ìˆ˜ ìˆìŒ)
+        Wall,   // ë²½(ì§€ë‚˜ê°ˆ ìˆ˜ ì—†ìŒ)
+        Slime   // ìŠ¬ë¼ì„(ì§€ë‚˜ê°ˆ ìˆ˜ ì—†ìŒ)
     }
 
     /// <summary>
-    /// ÀÌ ³ëµåÀÇ Á¾·ù
+    /// ì´ ë…¸ë“œì˜ ì¢…ë¥˜
     /// </summary>
     public NodeType nodeType = NodeType.Plain;
 
     /// <summary>
-    /// °æ·Î»ó ¾Õ¿¡ ÀÖ´Â ³ëµå ( ÀÌÀü ³ëµå )
+    /// ê²½ë¡œìƒ ì•ì— ìˆëŠ” ë…¸ë“œ
     /// </summary>
     public Node parent;
 
     /// <summary>
-    /// NodeÀÇ »ı¼ºÀÚ
+    /// Nodeì˜ ìƒì„±ì
     /// </summary>
-    /// <param name="x">±×¸®µå xÁÂÇ¥</param>
-    /// <param name="y">±×¸®µå yÁÂÇ¥</param>
-    /// <param name="nodeType">³ëµåÀÇ Á¾·ù(±âº»°ª : Plain)</param>
+    /// <param name="x">ê·¸ë¦¬ë“œ ë§µì—ì„œì˜ xì¢Œí‘œ</param>
+    /// <param name="y">ê·¸ë¦¬ë“œ ë§µì—ì„œì˜ yì¢Œí‘œ</param>
+    /// <param name="nodeType">ë…¸ë“œì˜ ì¢…ë¥˜(ê¸°ë³¸ê°’ìœ¼ë¡œ í‰ì§€)</param>
     public Node(int x, int y, NodeType nodeType = NodeType.Plain)
     {
         this.x = x;
         this.y = y;
         this.nodeType = nodeType;
+        ClearData();
     }
 
     /// <summary>
-    /// ±æ Ã£±â¸¦ ÇÒ ¶§¸¶´Ù ÃÊ±âÈ­ ½ÃÅ°±â À§ÇØ ÀÖ´Â ÇÔ¼ö
+    /// ê¸¸ì°¾ê¸°ë¥¼ í•  ë•Œë§ˆë‹¤ ì´ˆê¸°í™” ì‹œí‚¤ê¸° ìœ„í•´ ìˆëŠ” í•¨ìˆ˜
     /// </summary>
     public void ClearData()
     {
-        G = float.MaxValue; // g°ªÀº ºñ±³ÇØ¼­ °»½ÅµÇ´Â °úÁ¤ÀÌ ÀÖÀ¸¹Ç·Î ±âº»°ªÀº ¸Å¿ì Ä¿¾ßÇÑ´Ù.
+        G = float.MaxValue;     // gê°’ì€ ë¹„êµí•´ì„œ ê°±ì‹ ë˜ëŠ” ê³¼ì •ì´ ìˆìœ¼ë¯€ë¡œ ê¸°ë³¸ê°’ì€ ë§¤ìš° ì»¤ì•¼ í•œë‹¤.
         H = float.MaxValue;
-        parent = null;
+        parent = null;        
     }
 
     /// <summary>
-    /// °°Àº Å¸ÀÔ °£ÀÇ Å©±â ºñ±³¸¦ ÇÏ´Â ÇÔ¼ö
+    /// ê°™ì€ íƒ€ì… ê°„ì˜ í¬ê¸° ë¹„êµë¥¼ í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
-    /// <param name="other">ºñ±³ ´ë»ó</param>
-    /// <returns>1,0,-1 Áß ÇÏ³ª</returns>
+    /// <param name="other">ë¹„êµ ëŒ€ìƒ</param>
+    /// <returns>-1,0,1 ì…‹ ì¤‘ í•˜ë‚˜</returns>
     public int CompareTo(Node other)
     {
-        // ³ª¿Ã ¼ö ÀÖ´Â ¸®ÅÏÀÇ °æ¿ìÀÇ ¼ö
-        // 0º¸´Ù ÀÛ´Ù (-1) : ³»°¡ ÀÛ´Ù ( this < other )
-        // 0°ú °°´Ù        : ³ª¿Í °°´Ù ( this == other )
-        // 0º¸´Ù Å©´Ù (+1) : ³»°¡ Å©´Ù ( this > other )
+        // ë‚˜ì˜¬ ìˆ˜ ìˆëŠ” ë¦¬í„´ì˜ ê²½ìš°ì˜ ìˆ˜
+        // 0ë³´ë‹¤ ì‘ë‹¤(-1)  : ë‚´ê°€ ì‘ë‹¤(this < other)
+        // 0ê³¼ ê°™ë‹¤        : ë‚˜ì™€ ê°™ë‹¤(this == other)
+        // 0ë³´ë‹¤ í¬ë‹¤(+1)  : ë‚´ê°€ í¬ë‹¤(this > other)
 
-        if (other == null)           // other°¡ nullÀÌ¸é ³»°¡ Å©´Ù.
+        if(other == null)               // otherê°€ nullì´ë©´ ë‚´ê°€ í¬ë‹¤
             return 1;
- 
-        return F.CompareTo(other.F); // F °ªÀ» ±âÁØÀ¸·Î ¼ø¼­¸¦ Á¤ÇØ¶ó
+
+        return F.CompareTo(other.F);   // F ê°’ì„ ê¸°ì¤€ìœ¼ë¡œ ìˆœì„œë¥¼ ì •í•´ë¼
     }
 
     /// <summary>
-    /// == ¿¬»êÀÚ ¿À¹ö·Îµù, µÎ ³ëµå°¡ °°ÀºÁö È®ÀÎ (x,y°¡ °°À¸¸é true)
+    /// == ëª…ë ¹ì–´ ì˜¤ë²„ë¡œë”©, ë‘ ë…¸ë“œê°€ ê°™ì€ì§€ í™•ì¸(x,yê°€ ê°™ìœ¼ë©´ ê°™ë‹¤)
     /// </summary>
-    /// <param name="left">== ¿ŞÂÊ ³ëµå</param>
-    /// <param name="right">== ¿À¸¥ÂÊ ³ëµå</param>
-    /// <returns>°°À¸¸é true, ´Ù¸£¸é false</returns>
-    public static bool operator == (Node left, Node right)
+    /// <param name="left">== ì™¼ìª½ì— ìˆëŠ” ë…¸ë“œ</param>
+    /// <param name="right">== ì˜¤ë¥¸ìª½ì— ìˆëŠ” ë…¸ë“œ</param>
+    /// <returns>ê°™ìœ¼ë©´ true, ë‹¤ë¥´ë©´ false</returns>
+    //public static bool operator ==(Node left, Node right)
+    //{
+    //    return left.x == right.x && left.y == right.y;
+    //}
+
+
+    public static bool operator ==(Node left, Vector2Int right)
     {
         return left.x == right.x && left.y == right.y;
     }
 
-    public static bool operator == (Node left, Vector2Int right)
-    {
-        return left.x == right.x && left.y == right.y;
-    }
-
     /// <summary>
-    /// != ¿¬»êÀÚ ¿À¹ö·Îµù, µÎ ³ëµå°¡ ´Ù¸¥Áö È®ÀÎ (x,yÁß ÇÏ³ª°¡ ´Ù¸£¸é true)
+    /// != ëª…ë ¹ì–´ ì˜¤ë²„ë¡œë”©, ë‘ ë…¸ë“œê°€ ë‹¤ë¥¸ì§€ í™•ì¸(x,y ì¤‘ í•˜ë‚˜ê°€ ë‹¤ë¥´ë©´ ë‹¤ë¥´ë‹¤.)
     /// </summary>
-    /// <param name="left">!= ¿ŞÂÊ ³ëµå</param>
-    /// <param name="right">!= ¿À¸¥ÂÊ ³ëµå</param>
-    /// <returns>°°À¸¸é false, ´Ù¸£¸é true</returns>
-    public static bool operator != (Node left, Node right)
-    {
-        return left.x != right.x || left.y != right.y;
-    }
+    /// <param name="left">== ì™¼ìª½ì— ìˆëŠ” ë…¸ë“œ</param>
+    /// <param name="right">== ì˜¤ë¥¸ìª½ì— ìˆëŠ” ë…¸ë“œ</param>
+    /// <returns>ê°™ìœ¼ë©´ false, ë‹¤ë¥´ë©´ true</returns>
+    //public static bool operator !=(Node left, Node right)
+    //{
+    //    return left.x != right.x || left.y != right.y;
+    //}
 
-    public static bool operator != (Node left, Vector2Int right)
+    public static bool operator !=(Node left, Vector2Int right)
     {
         return left.x != right.x || left.y != right.y;
     }
 
     public override bool Equals(object obj)
     {
-        // obj´Â Node Å¬·¡½º°í this¿Í objÀÇ x,y°¡ °°´Ù.
-        return obj is Node other && this.x == other.x && this.y == other.y ;
+        // objëŠ” Node í´ë˜ìŠ¤ê³  thisì™€ objì˜ x, yê°€ ê°™ë‹¤.
+        return obj is Node other && this.x == other.x && this.y == other.y;
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(x, y); // À§Ä¡ °ª 2°³·Î ÇØ½¬ÄÚµå ¸¸µé±â
+        return HashCode.Combine(x, y); // ìœ„ì¹˜ê°’ 2ê°œë¡œ í•´ì‰¬ì½”ë“œ ë§Œë“¤ê¸°
     }
 }

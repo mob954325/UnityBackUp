@@ -54,6 +54,9 @@ TagManager:
   - name: Object
     uniqueID: 682523943
     locked: 0
+  - name: DebugEffect
+    uniqueID: 3446216993
+    locked: 0
   - name: Slime
     uniqueID: 253125733
     locked: 0

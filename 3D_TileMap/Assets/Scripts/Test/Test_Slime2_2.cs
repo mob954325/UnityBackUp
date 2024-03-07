@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Test_Slime2_2 : TestBase
 {
+#if UNITY_EDITOR
     public Slime slime;
 
     protected override void OnTest1(InputAction.CallbackContext context)
@@ -27,4 +28,5 @@ public class Test_Slime2_2 : TestBase
     {
         slime.TestShader(4);
     }
+#endif
 }

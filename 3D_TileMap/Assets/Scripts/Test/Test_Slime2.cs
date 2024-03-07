@@ -114,6 +114,7 @@ public class Test_Slime2 : TestBase
         mainMaterial.SetFloat(DissolveFadeID, 0);
     }
 
+#if UNITY_EDITOR
     protected override void OnTest1(InputAction.CallbackContext context)
     {
         resetShaderProperty();
@@ -137,5 +138,5 @@ public class Test_Slime2 : TestBase
     {
         StartCoroutine(StartDissolve());
     }
-
+#endif
 }
